@@ -1,0 +1,269 @@
+{% extends 'base.html' %}
+{% load static %}
+
+{% block content %}
+<div class="container mt-5">
+    <!-- Tabs Navigation -->
+    <ul class="nav nav-tabs mb-4" id="vocabularyTabs" role="tablist">
+        <li class="nav-item" role="presentation">
+            <button class="nav-link active" id="my-vocab-tab" data-bs-toggle="tab" data-bs-target="#my-vocab" type="button" role="tab">
+                Từ vựng của tôi
+            </button>
+        </li>
+        <li class="nav-item" role="presentation">
+            <button class="nav-link" id="topics-tab" data-bs-toggle="tab" data-bs-target="#topics" type="button" role="tab">
+                Học theo chủ đề
+            </button>
+        </li>
+    </ul>
+
+    <div class="tab-content" id="vocabularyTabContent">
+        <!-- My Vocabulary Tab -->
+        <div class="tab-pane fade show active" id="my-vocab" role="tabpanel">
+            <div class="mb-4">
+                <button class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#addWordModal">
+                    <i class="fas fa-plus"></i> Thêm từ mới
+                </button>
+            </div>
+            <div class="row row-cols-1 row-cols-sm-2 row-cols-md-3 g-4" id="myWordsGrid">
+                <div class="alert alert-info">Chọn tab để tải từ vựng của bạn.</div>
+            </div>
+        </div>
+
+        <!-- Topics Tab -->
+        <div class="tab-pane fade" id="topics" role="tabpanel">
+            <div id="supabaseTopicsGrid" class="row row-cols-1 row-cols-sm-2 row-cols-md-3 g-4 justify-content-center">
+                <div class="alert alert-info">Chọn tab để tải chủ đề.</div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- Modal for Adding New Word -->
+<div class="modal fade" id="addWordModal" tabindex="-1" aria-labelledby="addWordModalLabel" aria-hidden="true">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title" id="addWordModalLabel">Thêm từ mới</h5>
+                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+            </div>
+            <div class="modal-body">
+                <form id="addWordForm">
+                    <div class="mb-3">
+                        <label for="wordInput" class="form-label">Từ tiếng Anh</label>
+                        <input type="text" class="form-control" id="wordInput" required>
+                    </div>
+                    <div class="mb-3">
+                        <label for="definitionInput" class="form-label">Nghĩa tiếng Việt</label>
+                        <textarea class="form-control" id="definitionInput" rows="3"></textarea>
+                    </div>
+                    <div class="mb-3">
+                        <label for="exampleInput" class="form-label">Ví dụ</label>
+                        <textarea class="form-control" id="exampleInput" rows="3"></textarea>
+                    </div>
+                    <div class="mb-3">
+                        <label for="topicInput" class="form-label">Chủ đề</label>
+                        <select class="form-select" id="topicInput">
+                            <option value="">Không chọn</option>
+                        </select>
+                    </div>
+                </form>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Hủy</button>
+                <button type="button" class="btn btn-primary" id="saveWordBtn">Lưu</button>
+            </div>
+        </div>
+    </div>
+</div>
+
+<style>
+    .topic-card {
+        display: flex;
+        flex-direction: column;
+        max-height: 400px;
+        min-height: 300px; /* Chiều cao cơ bản để cân đối */
+        width: 100%;
+    }
+    .topic-card .card-body {
+        display: flex;
+        flex-direction: column;
+        justify-content: space-between;
+        flex-grow: 1;
+        padding: 1rem;
+    }
+    .topic-words-list {
+        margin-top: 10px;
+        max-height: 150px; /* Giảm chiều cao tối đa để tránh lệch */
+        overflow-y: auto;
+        display: flex;
+        flex-direction: column;
+        gap: 8px;
+    }
+    .topic-words-list .card {
+        margin-bottom: 8px;
+        width: 100%;
+    }
+    #supabaseTopicsGrid, #myWordsGrid {
+        display: flex;
+        flex-wrap: wrap;
+        gap: 1.5rem; /* Khoảng cách giữa các card */
+        justify-content: center; /* Căn giữa các card */
+    }
+    #supabaseTopicsGrid .card, #myWordsGrid .card {
+        min-width: 200px;
+        max-width: 300px; /* Giới hạn chiều rộng tối đa */
+        flex: 1 1 auto; /* Tự điều chỉnh kích thước */
+        transition: transform 0.2s;
+    }
+    #supabaseTopicsGrid .card:hover, #myWordsGrid .card:hover {
+        transform: translateY(-5px);
+    }
+    /* Điều chỉnh số cột theo breakpoint */
+    @media (max-width: 576px) {
+        #supabaseTopicsGrid .card, #myWordsGrid .card {
+            min-width: 100%;
+            max-width: 100%;
+        }
+        .topic-card {
+            min-height: 250px; /* Giảm chiều cao trên mobile */
+        }
+        .topic-words-list {
+            max-height: 120px; /* Giảm chiều cao trên mobile */
+        }
+    }
+    @media (min-width: 576px) and (max-width: 767.98px) {
+        #supabaseTopicsGrid .card, #myWordsGrid .card {
+            min-width: calc(50% - 1rem); /* 2 cột */
+        }
+    }
+    @media (min-width: 768px) and (max-width: 991.98px) {
+        #supabaseTopicsGrid .card, #myWordsGrid .card {
+            min-width: calc(33.33% - 1rem); /* 3 cột */
+        }
+    }
+    @media (min-width: 992px) {
+        #supabaseTopicsGrid .card, #myWordsGrid .card {
+            min-width: calc(25% - 1rem); /* 4 cột */
+        }
+    }
+</style>
+{% endblock %}
+
+{% block extra_js %}
+<script>
+document.addEventListener('DOMContentLoaded', function () {
+    const token = localStorage.getItem('access');
+    if (!token) {
+        alert("Bạn cần đăng nhập để sử dụng chức năng này.");
+        window.location.href = "{% url 'login' %}";
+        return;
+    }
+
+    const topicsContainer = document.getElementById('supabaseTopicsGrid');
+    const vocabContainer = document.getElementById('myWordsGrid');
+
+    async function fetchApi(url, method = 'GET', data = null) {
+        const headers = {
+            'Content-Type': 'application/json',
+            'Authorization': `Bearer ${localStorage.getItem('access')}` // Đảm bảo bạn đã lưu JWT Token trong localStorage
+        };
+
+        const options = {
+            method,
+            headers,
+            body: data ? JSON.stringify(data) : null
+        };
+
+        const response = await fetch(url, options);
+        if (!response.ok) {
+            const error = await response.json();
+            throw new Error(error.error || 'Something went wrong');
+        }
+        return await response.json();
+    }
+
+    async function fetchTopics() {
+        console.log("Gọi API lấy danh sách chủ đề");
+        const container = document.getElementById('supabaseTopicsGrid');
+        container.innerHTML = '';
+
+        try {
+            const topics = await fetchApi('/api/topics/vocab/');
+            if (topics.length === 0) {
+                container.innerHTML = '<div class="alert alert-secondary">Không có chủ đề nào.</div>';
+                return;
+            }
+
+            topics.forEach(topic => {
+                const col = document.createElement('div');
+                col.className = 'col';
+                col.innerHTML = `
+                    <div class="card shadow-sm h-100">
+                        <div class="card-body">
+                            <h5 class="card-title text-primary fw-bold">${topic.topic || 'Không có chủ đề'}</h5>
+                            <p class="card-text"><strong>${topic.english || 'Không có từ tiếng Anh'}</strong>: ${topic.vietnamese || 'Không có nghĩa tiếng Việt'}</p>
+                        </div>
+                    </div>
+                `;
+                container.appendChild(col);
+            });
+        } catch (err) {
+            console.error("Lỗi lấy danh sách chủ đề:", err);
+            alert("Không thể tải danh sách chủ đề.");
+        }
+    }
+
+    async function fetchUserVocabulary() {
+        try {
+            vocabContainer.innerHTML = '<div class="alert alert-info">Đang tải từ vựng...</div>';
+            const vocabulary = await fetchApi('/api/my-vocabulary/');
+            console.log("Vocabulary Data:", vocabulary);  // Debug dữ liệu nhận được
+            vocabContainer.innerHTML = '';
+
+            vocabulary.forEach(words => {
+                console.log("Word Data:", words);  // Debug từng đối tượng
+
+                const col = document.createElement('div');
+                col.className = 'col';
+
+                // Đảm bảo bạn lấy đúng thuộc tính từ đối tượng
+                const word = typeof words.word === 'object' ? JSON.stringify(words.word) : words.word;
+                const definition = typeof words.definition === 'object' ? JSON.stringify(words.definition) : words.definition;
+
+                col.innerHTML = `
+                    <div class="card shadow-sm h-100">
+                        <div class="card-body">
+                            <h5 class="card-title text-primary fw-bold">${word}</h5>
+                            <p class="card-text">${definition || 'Không có định nghĩa'}</p>
+                        </div>
+                    </div>
+                `;
+                vocabContainer.appendChild(col);
+            });
+        } catch (err) {
+            vocabContainer.innerHTML = '<div class="alert alert-danger">Không thể tải từ vựng.</div>';
+        }
+    }
+
+    async function addNewWord() {
+        const word = document.getElementById('wordInput').value.trim();
+        const definition = document.getElementById('definitionInput').value.trim();
+        const example = document.getElementById('exampleInput').value.trim();
+        const topic = document.getElementById('topicInput').value;
+        if (!word) return alert('Vui lòng nhập từ tiếng Anh.');
+
+        await fetchApi('/api/words/', 'POST', { word, definition, example, topic });
+        bootstrap.Modal.getInstance(document.getElementById('addWordModal')).hide();
+        document.getElementById('addWordForm').reset();
+        fetchUserVocabulary();
+    }
+
+    document.getElementById('topics-tab').addEventListener('click', fetchTopics);
+    document.getElementById('my-vocab-tab').addEventListener('click', fetchUserVocabulary);
+    document.getElementById('saveWordBtn').addEventListener('click', addNewWord);
+
+    fetchUserVocabulary(); // Mặc định khi load trang
+});
+</script>
+{% endblock %}

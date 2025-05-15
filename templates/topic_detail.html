@@ -87,3 +87,93 @@
 {% block extra_js %}
 <script src="{% static 'js/topic_detail.js' %}?{% now 'U' %}"></script>
 {% endblock extra_js %}
+
+{% extends 'base.html' %}
+{% load static %}
+{% block content %}
+<div id="topic-data" data-slug="{{ topic.slug }}"></div>
+<div class="container mt-4">
+    <!-- BREADCRUMB -->
+    <nav aria-label="breadcrumb">
+      <ol class="breadcrumb">
+        <li class="breadcrumb-item"><a href="{% url 'topics_view_page' %}">All topics</a></li>
+        <li class="breadcrumb-item active" aria-current="page">{{ topic.name }}</li>
+      </ol>
+    </nav>
+  
+    <h2 id="topic-name" class="fw-bold mb-4"></h2>
+  
+    <div id="sections-container"></div>
+</div>
+<style>
+    .breadcrumb {
+        background-color: transparent;
+        padding-left: 0;
+        margin-bottom: 1rem;
+    }
+
+    .breadcrumb a {
+        text-decoration: none;
+        color: #007bff;
+    }
+
+    .breadcrumb a:hover {
+        text-decoration: underline;
+    }
+
+    .breadcrumb-item + .breadcrumb-item::before {
+        content: " / ";
+    }
+    .card {
+        border-radius: 8px;
+        box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+        transition: box-shadow 0.3s ease;
+        cursor: pointer;
+    }
+
+    .card:hover {
+        box-shadow: 0 8px 16px rgba(0, 0, 0, 0.2);
+    }
+
+    /* Section button */
+    .card-header button {
+        font-size: 18px;  /* Tăng kích thước chữ */
+        font-weight: bold;
+        text-decoration: none;
+        color: black;
+    }
+
+    .card-header button:hover {
+        background-color: #f8f9fa;
+        color: #2c86e7;
+    }
+
+    .card-header button:focus {
+        outline: none;
+        box-shadow: 0 0 5px 2px rgba(0, 123, 255, 0.5);
+    }
+
+    .card-body ul {
+        padding-left: 20px;
+        list-style-type: none;
+    }
+
+    .card-body a {
+        color: #007bff;
+        text-decoration: none;
+        font-size: 18px;
+    }
+
+    .card-body a:hover {
+        text-decoration: none;
+    }
+
+    .card-body span {
+        font-size: 12px;
+    }
+
+</style>
+{% endblock %}
+{% block extra_js %}
+<script src="{% static 'js/topic_detail.js' %}?{% now 'U' %}"></script>
+{% endblock extra_js %}

@@ -1,0 +1,150 @@
+{% extends 'base.html' %}
+{% load static %}
+
+{% block content %}
+<div class="container mt-5">
+    <!-- Tabs -->
+    <ul class="nav nav-tabs mb-4" id="vocabularyTabs" role="tablist">
+        <li class="nav-item">
+            <button class="nav-link active" id="my-vocab-tab" data-bs-toggle="tab" data-bs-target="#my-vocab" type="button">
+                Từ vựng của tôi
+            </button>
+        </li>
+        <li class="nav-item">
+            <button class="nav-link" id="topics-tab" data-bs-toggle="tab" data-bs-target="#topics" type="button">
+                Học theo chủ đề
+            </button>
+        </li>
+    </ul>
+
+    <div class="tab-content">
+        <!-- Tab 1: My Vocabulary -->
+        <div class="tab-pane fade show active" id="my-vocab">
+            {% if user.is_authenticated %}
+            <div class="mb-4">
+                <button class="btn btn-primary">+ Thêm từ mới</button>
+            </div>
+            <div id="myWordsGrid" class="row row-cols-1 row-cols-md-3 g-4">
+                <!-- Từ user sẽ fetch từ Supabase -->
+            </div>
+            {% else %}
+            <div class="alert alert-warning">
+                <p>Vui lòng đăng nhập để xem từ của bạn.</p>
+                <a href="{% url 'login' %}" class="btn btn-primary">Đăng nhập</a>
+            </div>
+            {% endif %}
+        </div>
+
+        <!-- Tab 2: Topics -->
+        <div class="tab-pane fade" id="topics">
+            <div id="supabaseTopicsGrid" class="row row-cols-1 row-cols-md-2 g-4">
+                <!-- JS sẽ tạo card chủ đề -->
+            </div>
+        </div>
+    </div>
+</div>
+
+<style>
+    .vocab-list {
+        max-height: 300px; /* Độ cao tối đa của danh sách */
+        overflow-y: auto;  /* Cuộn dọc nếu danh sách quá dài */
+        padding-right: 10px; /* Đệm bên phải để dễ đọc */
+        border: 1px solid #ddd;
+        padding: 10px;
+        background: #f9f9f9;
+        border-radius: 8px;
+    }
+</style>
+{% endblock %}
+
+{% block extra_js %}
+<script>
+document.addEventListener('DOMContentLoaded', function () {
+    console.log("✅ DOMContentLoaded: Đã tải xong DOM.");
+    const container = document.getElementById('supabaseTopicsGrid');
+    const vocabContainer = document.getElementById('myWordsGrid');
+
+    // ✅ Gọi API lấy danh sách chủ đề khi trang được tải
+    fetchTopics();
+
+    // ✅ Hàm gọi API chung
+    async function fetchApi(url, method = 'GET', body = null) {
+        const token = localStorage.getItem('access');
+        if (!token) {
+            alert("Bạn cần đăng nhập để sử dụng chức năng này.");
+            window.location.href = "/login/";
+            return;
+        }
+
+        const options = {
+            method,
+            headers: {
+                'Authorization': `Bearer ${token}`,
+                'Content-Type': 'application/json',
+            },
+        };
+
+        if (body) {
+            options.body = JSON.stringify(body);
+        }
+
+        const response = await fetch(url, options);
+        if (!response.ok) {
+            const error = await response.json();
+            throw new Error(error.message || 'Có lỗi xảy ra khi gọi API.');
+        }
+        return response.json();
+    }
+
+    // ✅ Lấy danh sách chủ đề và từ vựng từ API
+    async function fetchTopics() {
+        console.log("Gọi API lấy danh sách chủ đề");
+        container.innerHTML = '';
+
+        try {
+            const topics = await fetchApi('/api/topics/vocab/');
+            console.log("Danh sách chủ đề:", topics);
+
+            if (topics.length === 0) {
+                container.innerHTML = '<div class="alert alert-secondary">Không có chủ đề nào.</div>';
+                return;
+            }
+
+            // ✅ Nhóm từ vựng theo chủ đề
+            const topicsMap = {};
+            topics.forEach(word => {
+                if (!topicsMap[word.topic]) {
+                    topicsMap[word.topic] = [];
+                }
+                topicsMap[word.topic].push(word);
+            });
+
+            // ✅ Tạo card cho mỗi chủ đề
+            Object.keys(topicsMap).forEach(topicName => {
+                const col = document.createElement('div');
+                col.className = 'col-12 col-md-6 mb-4';
+
+                col.innerHTML = `
+                    <div class="card shadow-sm h-100">
+                        <div class="card-body">
+                            <h5 class="card-title text-primary fw-bold">${topicName}</h5>
+                            <div class="vocab-list mt-3">
+                                ${topicsMap[topicName].map(word => `
+                                    <div class="mb-2">
+                                        <strong>${word.english}</strong> - ${word.vietnamese}
+                                    </div>
+                                `).join('')}
+                            </div>
+                        </div>
+                    </div>
+                `;
+                container.appendChild(col);
+            });
+        } catch (err) {
+            console.error("Lỗi lấy danh sách chủ đề:", err);
+            alert("Không thể tải danh sách chủ đề.");
+        }
+    }
+});
+</script>
+{% endblock %}
