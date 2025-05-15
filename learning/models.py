@@ -60,3 +60,69 @@ class User(AbstractBaseUser, PermissionsMixin):
 
     def __str__(self):
         return self.name or self.email
+    
+class TopicListen(models.Model):
+    name = models.CharField(max_length=255)
+    slug = models.SlugField(unique=True, blank=True)
+    image = models.ImageField(upload_to='image/',blank=True, null=True)
+    lessons = models.IntegerField(default=0)
+    levels = models.CharField(
+        max_length=10,
+        choices=[
+            ('A1-C1','A1-C1'),
+            ('A1-B1','A1-B1'),
+            ('A2-C1','A2-C1'),
+            ('B1-C2','B1-C2'),
+            ('A1','A1'),
+        ],
+        default='A1'
+    )
+
+    def save(self, *args, **kwargs):
+        if not self.slug:
+            self.slug = slugify(self.name)
+        super().save(*args, **kwargs)
+    
+    def __str__(self):
+        return self.name
+
+class Section(models.Model):
+    title = models.CharField(max_length=150)
+    position = models.PositiveIntegerField(default=1)
+    topic = models.ForeignKey(TopicListen, on_delete=models.CASCADE, related_name='sections')
+
+    def __str__(self):
+        return self.title
+    
+class Subtopic(models.Model):
+    title = models.CharField(max_length=150)
+    level = models.CharField(
+        max_length=20,
+        choices=[('A1', 'A1'), ('A2', 'A2'), ('B1', 'B1'), ('B2', 'B2'), ('C1', 'C1')],
+        default='A1'
+    )
+    slug = models.SlugField(unique=True, blank=True)
+    num_part = models.IntegerField(default=0)
+    full_textkey = models.TextField(blank=True)
+    full_audioSrc = models.URLField()
+    topic = models.ForeignKey(TopicListen, on_delete=models.CASCADE, related_name='topics', null=True, blank=True)
+    section = models.ForeignKey(Section, on_delete=models.CASCADE, related_name='subtopics', null=True, blank=True)
+
+    def save(self, *args, **kwargs):
+        if not self.slug:
+            self.slug = slugify(self.title)
+        super().save(*args, **kwargs)
+
+    def __str__(self):
+        return self.title
+    
+class AudioExercise(models.Model):
+    audioSrc = models.URLField()
+    correct_text = models.TextField()
+    position = models.PositiveIntegerField(default=1)
+    subtopic = models.ForeignKey(Subtopic, on_delete=models.CASCADE, related_name='exercises')
+    timeStart = models.FloatField(null=True, blank=True)
+    timeEnd = models.FloatField(null=True, blank=True)
+
+    def __str__(self):
+        return self.subtopic.title

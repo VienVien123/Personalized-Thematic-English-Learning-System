@@ -1,0 +1,131 @@
+{% extends 'base.html' %}
+{% load static %}
+{% block content %}
+<style>
+    .breadcrumb {
+      background-color: transparent;
+      padding-left: 0;
+      margin-bottom: 1rem;
+    }
+  
+    .breadcrumb a {
+      text-decoration: none;
+      color: #007bff;
+    }
+  
+    .breadcrumb a:hover {
+      text-decoration: underline;
+    }
+  
+    .breadcrumb-item + .breadcrumb-item::before {
+      content: " / ";
+    }
+    .is-valid {
+        border-color: #198754 !important;
+        background-color: #d1e7dd !important;
+    }
+
+    .is-invalid {
+        border-color: #dc3545 !important;
+        background-color: #f8d7da !important;
+    }
+</style>
+<div id="api-url" 
+     data-url="/api/topics/listen/{{ topic.slug }}/subtopics/{{ subtopic.slug }}/listen-and-type/"
+     data-topic-slug="{{ topic.slug }}"
+     data-subtopic-id="{{ subtopic.id }}">
+</div>
+<div class="container mt-4">
+    <!-- Breadcrumb điều hướng -->
+    <nav aria-label="breadcrumb">
+      <ol class="breadcrumb">
+        <li class="breadcrumb-item">
+          <a href="{% url 'topics_view_page' %}">All topics</a>
+        </li>
+        <li class="breadcrumb-item">
+          <a href="{% url 'topics_detail_page' topic.slug %}">{{ topic.name }}</a>
+        </li>
+        <li class="breadcrumb-item active" aria-current="page">
+          {{ subtopic.title }}
+        </li>
+      </ol>
+    </nav>
+</div>
+<div class="container mt-5">
+  <h2 id="topic-name" class="fw-bold"></h2>
+  <h4 id="subtopic-title" class="mb-4 text-muted"></h4>
+
+  <!-- Tabs -->
+  <ul class="nav nav-tabs mb-3" id="exerciseTabs" role="tablist">
+    <li class="nav-item" role="presentation">
+      <button class="nav-link active" id="dictation-tab" data-bs-toggle="tab" data-bs-target="#dictation" type="button" role="tab">Dictation</button>
+    </li>
+    <li class="nav-item" role="presentation">
+      <button class="nav-link" id="transcript-tab" data-bs-toggle="tab" data-bs-target="#transcript" type="button" role="tab">Full transcript</button>
+    </li>
+  </ul>
+
+  <div class="tab-content">
+    <!-- Dictation tab -->
+    <div class="tab-pane fade show active" id="dictation" role="tabpanel">
+      <div class="card shadow-sm p-4" style="height: 500px">
+        <div class="d-flex justify-content-start gap-3 mb-3">
+          <button class="btn" id="prev-btn">←</button>
+          <span class="fw-bold"><span id="exercise-index">0</span> / <span id="exercise-total">0</span></span>
+          <button class="btn" id="next-btn">→</button>
+        </div>
+        <div id="exercise-content"></div>
+      </div>
+    </div>
+
+    <!-- Full transcript tab -->
+    <div class="tab-pane fade" id="transcript" role="tabpanel">
+      <div class="card shadow-sm p-4">
+        <div class="mb-3 d-flex justify-content-between align-items-center">
+          <div>
+            <i class="bi bi-translate me-2"></i>Translation:
+            <select class="form-select d-inline w-auto" id="trans-lang">
+              <option value="vi" selected>Vietnamese</option>
+              <option value="en">English</option>
+            </select>
+          </div>
+          <div class="form-check">
+            <input class="form-check-input" type="checkbox" checked id="auto-scroll">
+            <label class="form-check-label" for="auto-scroll">Auto scroll</label>
+          </div>
+        </div>
+
+        <div class="row">
+          <!-- Left side: Audio tổng + Slide -->
+          <div class="col-md-6">
+            <audio id="full-audio" controls class="w-100 mb-3"></audio>  <!-- Đưa audio này vào cột trái -->
+            
+            <div id="slide-box" class="card text-center mb-3 p-4" style="height: 200px; display: flex; flex-direction: column; justify-content: center;">
+              <h5 id="slide-text" class="mb-2">Loading...</h5>
+              <p id="slide-translation" class="text-muted"></p>
+            </div>
+        
+            <div class="d-flex justify-content-center gap-2">
+              <button class="btn" id="slide-prev">←</button>
+              <span class="fw-bold"><span id="slide-index">0</span> / <span id="slide-total">0</span></span>
+              <button class="btn" id="slide-next">→</button>
+            </div>
+          </div>
+        
+          <!-- Right side: Danh sách câu -->
+          <div class="col-md-6">
+            <ul class="list-group" id="transcript-list" style="max-height: 400px; overflow-y: auto; overflow-x: hidden; scroll-behavior: smooth;"></ul>
+            <p class="text-muted mt-3 text-left">Press "Space" to Play/Pause.</p>
+            <p class="text-muted mt-3 text-left">Press ← and → to move between sentences.</p>
+          </div>
+        </div>        
+
+        
+      </div>
+    </div>
+  </div>
+</div>
+{% endblock content %}
+{% block extra_js %}
+<script src="{% static 'js/listen_and_type.js' %}?{% now 'U' %}"></script>
+{% endblock extra_js %}

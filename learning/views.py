@@ -26,11 +26,12 @@ import environ
 from django.views.decorators.csrf import csrf_exempt
 
 from .serializers import (
-    UserSerializer, RegisterSerializer, LoginSerializer, LogoutSerializer, ChangePasswordSerializer
+    UserSerializer, RegisterSerializer, LoginSerializer, LogoutSerializer, ChangePasswordSerializer,
+    TopicListenSerializer, SectionSerializer, SubtopicSerializer, AudioExerciseSerializer
 )
 
 from .models import (
-    User
+    User, TopicListen, Section, Subtopic, AudioExercise
 )
 
 load_dotenv()
@@ -130,6 +131,107 @@ class ChangePasswordView(generics.UpdateAPIView):
         serializer.save()
         return Response({'message':'Đổi mật khẩu thành công'}, status=status.HTTP_200_OK)
     
+class TopicView(APIView):
+    permission_classes = [AllowAny]
+
+    def get(self, request):
+        # URL của bảng learning_topiclisten trên Supabase
+        url = f"{SUPABASE_URL}/rest/v1/learning_topiclisten?select=*"
+        headers = {
+            "apikey": SUPABASE_API_KEY,
+            "Authorization": f"Bearer {SUPABASE_API_KEY}"
+        }
+
+        try:
+            response = requests.get(url, headers=headers, timeout=10)
+
+            if response.status_code == 200:
+                data = response.json()
+
+                # Đảm bảo dữ liệu trả về luôn là một mảng
+                if not isinstance(data, list):
+                    data = []
+
+                return Response(data, status=200)
+            else:
+                return Response({
+                    "error": "Unable to fetch data from Supabase",
+                    "status_code": response.status_code,
+                    "details": response.text
+                }, status=response.status_code)
+        except requests.RequestException as e:
+            print("❌ Error while connecting to Supabase:", str(e))
+            return Response({"error": "Connection error to Supabase."}, status=500)
+        except ValueError:
+            print("❌ Error parsing JSON response from Supabase")
+            return Response({"error": "Invalid JSON response from Supabase."}, status=500)
+
+
+class TopicDetailView(APIView):
+    permission_classes = [AllowAny]
+    def get(self, request, topic_slug, format=None):
+        topic = get_object_or_404(TopicListen, slug=topic_slug)
+        query = request.GET.get('q','')
+        level = request.GET.get('level','all')
+
+        sections = Section.objects.filter(topic=topic).prefetch_related('subtopics')
+
+        for section in sections:
+            subs = section.subtopics.all().order_by('id')
+
+            should_filter = query or (level and level != 'all')
+
+            if should_filter:
+                if query:
+                    subs = subs.filter(title__icontains=query)
+                if level and level != 'all':
+                    subs = subs.filter(level=level)
+            section.filtered_subtopics = subs
+
+        topic_data = TopicListenSerializer(topic).data
+        return Response({
+            'topic':topic_data,
+            'sections':SectionSerializer(sections, many=True).data
+        })
+
+class ListenAndTypeView(APIView):
+    permission_classes = [AllowAny]
+    def get(self, request, topic_slug, subtopic_slug, format=None):
+        topic = get_object_or_404(TopicListen, slug=topic_slug)
+        subtopic = get_object_or_404(Subtopic, slug=subtopic_slug)
+        exercises = AudioExercise.objects.filter(subtopic=subtopic).order_by('position')
+
+        # Chúng ta trả về tên topic, subtopic, và các bài tập
+        exercises_data = AudioExerciseSerializer(exercises, many=True).data
+        
+        return Response({
+            'topic': {'name': topic.name, 'slug': topic.slug},
+            'subtopic': SubtopicSerializer(subtopic).data,
+            'exercises': exercises_data
+        })
+    
+@api_view(['GET'])
+@permission_classes([AllowAny])
+def get_previous_next_subtopic(request, topic_slug, subtopic_id):
+    topic = get_object_or_404(TopicListen, slug=topic_slug)
+    current_subtopic = get_object_or_404(Subtopic, id=subtopic_id, topic=topic)
+
+    previous_subtopic = Subtopic.objects.filter(topic=topic, id__lt=current_subtopic.id).order_by('-id').first()
+    next_subtopic = Subtopic.objects.filter(topic=topic, id__gt=current_subtopic.id).order_by('id').first()
+
+    return JsonResponse({
+        'previous': {
+            'id': previous_subtopic.id,
+            'slug': previous_subtopic.slug,
+            'url': f"/topics/listen/{topic.slug}/subtopics/{previous_subtopic.slug}/listen-and-type/"
+        } if previous_subtopic else None,
+        'next': {
+            'id': next_subtopic.id,
+            'slug': next_subtopic.slug,
+            'url': f"/topics/listen/{topic.slug}/subtopics/{next_subtopic.slug}/listen-and-type/"
+        } if next_subtopic else None
+    })
+
 # <Render templates HTML files>
 def home_page(request):
     return render(request, 'home.html')
@@ -145,6 +247,30 @@ def change_password_page(request):
 
 def account_page(request):
     return render(request, 'user_account.html')
+
+# Listen templates
+def topics_view_page(request):
+    return render(request, 'topics_view.html')
+
+def topic_detail_page(request, topic_slug):
+    topic = get_object_or_404(TopicListen,slug=topic_slug)
+    sections = Section.objects.filter(topic=topic).prefetch_related('subtopics')
+    return render(request, 'topic_detail.html', {'topic':topic, 'sections':sections})
+
+def listen_and_type_page(request, topic_slug, subtopic_slug):
+    topic = get_object_or_404(TopicListen, slug=topic_slug)
+    subtopic = get_object_or_404(Subtopic, slug=subtopic_slug)
+
+    exercises = AudioExercise.objects.filter(subtopic=subtopic).order_by('id','position')
+    return render(
+        request,
+        'listen_and_type.html',
+        {
+            'topic':topic,
+            'subtopic':subtopic,
+            'exercises': exercises
+        }
+    )
 
 def grammar_page(request):
     return render(request, 'grammar.html')
