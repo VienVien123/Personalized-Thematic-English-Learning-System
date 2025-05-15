@@ -24,10 +24,9 @@ import google.generativeai as genai
 from dotenv import load_dotenv
 from langchain_community.vectorstores import Chroma
 from langchain.embeddings import HuggingFaceEmbeddings
-import re
-
+import environ
 from django.views.decorators.csrf import csrf_exempt
-
+import re
 from .serializers import (
     UserSerializer, RegisterSerializer, LoginSerializer, LogoutSerializer, ChangePasswordSerializer,
     TopicListenSerializer, SectionSerializer, SubtopicSerializer, AudioExerciseSerializer,
@@ -35,8 +34,7 @@ from .serializers import (
 )
 
 from .models import (
-    User, TopicListen, Section, Subtopic, AudioExercise,
-    TopicVocab, Word
+    User, TopicListen, Section, Subtopic, AudioExercise, TopicVocab, Word
 )
 
 load_dotenv()
@@ -139,149 +137,7 @@ class ChangePasswordView(generics.UpdateAPIView):
         serializer.is_valid(raise_exception=True)
         serializer.save()
         return Response({'message':'Đổi mật khẩu thành công'}, status=status.HTTP_200_OK)
-    
-class TopicView(APIView):
-    permission_classes = [AllowAny]
 
-    def get(self, request):
-        # URL của bảng learning_topiclisten trên Supabase
-        url = f"{SUPABASE_URL}/rest/v1/learning_topiclisten?select=*"
-        headers = {
-            "apikey": SUPABASE_API_KEY,
-            "Authorization": f"Bearer {SUPABASE_API_KEY}"
-        }
-
-        try:
-            response = requests.get(url, headers=headers, timeout=10)
-
-            if response.status_code == 200:
-                data = response.json()
-
-                # Đảm bảo dữ liệu trả về luôn là một mảng
-                if not isinstance(data, list):
-                    data = []
-
-                return Response(data, status=200)
-            else:
-                return Response({
-                    "error": "Unable to fetch data from Supabase",
-                    "status_code": response.status_code,
-                    "details": response.text
-                }, status=response.status_code)
-        except requests.RequestException as e:
-            print("❌ Error while connecting to Supabase:", str(e))
-            return Response({"error": "Connection error to Supabase."}, status=500)
-        except ValueError:
-            print("❌ Error parsing JSON response from Supabase")
-            return Response({"error": "Invalid JSON response from Supabase."}, status=500)
-
-
-class TopicDetailView(APIView):
-    permission_classes = [AllowAny]
-    def get(self, request, topic_slug, format=None):
-        topic = get_object_or_404(TopicListen, slug=topic_slug)
-        query = request.GET.get('q','')
-        level = request.GET.get('level','all')
-
-        sections = Section.objects.filter(topic=topic).prefetch_related('subtopics')
-
-        for section in sections:
-            subs = section.subtopics.all().order_by('id')
-
-            should_filter = query or (level and level != 'all')
-
-            if should_filter:
-                if query:
-                    subs = subs.filter(title__icontains=query)
-                if level and level != 'all':
-                    subs = subs.filter(level=level)
-            section.filtered_subtopics = subs
-
-        topic_data = TopicListenSerializer(topic).data
-        return Response({
-            'topic':topic_data,
-            'sections':SectionSerializer(sections, many=True).data
-        })
-
-class ListenAndTypeView(APIView):
-    permission_classes = [AllowAny]
-    def get(self, request, topic_slug, subtopic_slug, format=None):
-        topic = get_object_or_404(TopicListen, slug=topic_slug)
-        subtopic = get_object_or_404(Subtopic, slug=subtopic_slug)
-        exercises = AudioExercise.objects.filter(subtopic=subtopic).order_by('position')
-
-        # Chúng ta trả về tên topic, subtopic, và các bài tập
-        exercises_data = AudioExerciseSerializer(exercises, many=True).data
-        
-        return Response({
-            'topic': {'name': topic.name, 'slug': topic.slug},
-            'subtopic': SubtopicSerializer(subtopic).data,
-            'exercises': exercises_data
-        })
-    
-@api_view(['GET'])
-@permission_classes([AllowAny])
-def get_previous_next_subtopic(request, topic_slug, subtopic_id):
-    topic = get_object_or_404(TopicListen, slug=topic_slug)
-    current_subtopic = get_object_or_404(Subtopic, id=subtopic_id, topic=topic)
-
-    previous_subtopic = Subtopic.objects.filter(topic=topic, id__lt=current_subtopic.id).order_by('-id').first()
-    next_subtopic = Subtopic.objects.filter(topic=topic, id__gt=current_subtopic.id).order_by('id').first()
-
-    return JsonResponse({
-        'previous': {
-            'id': previous_subtopic.id,
-            'slug': previous_subtopic.slug,
-            'url': f"/topics/listen/{topic.slug}/subtopics/{previous_subtopic.slug}/listen-and-type/"
-        } if previous_subtopic else None,
-        'next': {
-            'id': next_subtopic.id,
-            'slug': next_subtopic.slug,
-            'url': f"/topics/listen/{topic.slug}/subtopics/{next_subtopic.slug}/listen-and-type/"
-        } if next_subtopic else None
-    })
-
-# <Render templates HTML files>
-def home_page(request):
-    return render(request, 'home.html')
-
-def login_page(request):
-    return render(request, 'login.html')
-
-def register_page(request):
-    return render(request, 'register.html')
-
-def change_password_page(request):
-    return render(request, 'change_password.html')
-
-def account_page(request):
-    return render(request, 'user_account.html')
-
-# Listen templates
-def topics_view_page(request):
-    return render(request, 'topics_view.html')
-
-def topic_detail_page(request, topic_slug):
-    topic = get_object_or_404(TopicListen,slug=topic_slug)
-    sections = Section.objects.filter(topic=topic).prefetch_related('subtopics')
-    return render(request, 'topic_detail.html', {'topic':topic, 'sections':sections})
-
-def listen_and_type_page(request, topic_slug, subtopic_slug):
-    topic = get_object_or_404(TopicListen, slug=topic_slug)
-    subtopic = get_object_or_404(Subtopic, slug=subtopic_slug)
-
-    exercises = AudioExercise.objects.filter(subtopic=subtopic).order_by('id','position')
-    return render(
-        request,
-        'listen_and_type.html',
-        {
-            'topic':topic,
-            'subtopic':subtopic,
-            'exercises': exercises
-        }
-    )
-
-# Vocabulary templates
 # ------------------ Web Pages ------------------
 def topics(request):
     topics_list = TopicVocab.objects.all()
@@ -443,9 +299,141 @@ def add_word(request):
             return Response(serializer.data, status=status.HTTP_201_CREATED)
         return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
 
+class TopicView(APIView):
+    permission_classes = [AllowAny]
+
+    def get(self, request):
+        # URL của bảng learning_topiclisten trên Supabase
+        url = f"{SUPABASE_URL}/rest/v1/learning_topiclisten?select=*"
+        headers = {
+            "apikey": SUPABASE_API_KEY,
+            "Authorization": f"Bearer {SUPABASE_API_KEY}"
+        }
+
+        try:
+            response = requests.get(url, headers=headers)
+
+            if response.status_code == 200:
+                data = response.json()
+                return Response(data, status=200)
+            else:
+                return Response({
+                    "error": "Unable to fetch data from Supabase",
+                    "details": response.text
+                }, status=response.status_code)
+        except requests.RequestException as e:
+            print("❌ Error while connecting to Supabase:", str(e))
+            return Response({"error": "Connection error to Supabase."}, status=500)
+
+class TopicDetailView(APIView):
+    permission_classes = [AllowAny]
+    def get(self, request, topic_slug, format=None):
+        topic = get_object_or_404(TopicListen, slug=topic_slug)
+        query = request.GET.get('q','')
+        level = request.GET.get('level','all')
+
+        sections = Section.objects.filter(topic=topic).prefetch_related('subtopics')
+
+        for section in sections:
+            subs = section.subtopics.all().order_by('id')
+
+            should_filter = query or (level and level != 'all')
+
+            if should_filter:
+                if query:
+                    subs = subs.filter(title__icontains=query)
+                if level and level != 'all':
+                    subs = subs.filter(level=level)
+            section.filtered_subtopics = subs
+
+        topic_data = TopicListenSerializer(topic).data
+        return Response({
+            'topic':topic_data,
+            'sections':SectionSerializer(sections, many=True).data
+        })
+
+class ListenAndTypeView(APIView):
+    permission_classes = [AllowAny]
+    def get(self, request, topic_slug, subtopic_slug, format=None):
+        topic = get_object_or_404(TopicListen, slug=topic_slug)
+        subtopic = get_object_or_404(Subtopic, slug=subtopic_slug)
+        exercises = AudioExercise.objects.filter(subtopic=subtopic).order_by('position')
+
+        # Chúng ta trả về tên topic, subtopic, và các bài tập
+        exercises_data = AudioExerciseSerializer(exercises, many=True).data
+        
+        return Response({
+            'topic': {'name': topic.name, 'slug': topic.slug},
+            'subtopic': SubtopicSerializer(subtopic).data,
+            'exercises': exercises_data
+        })
+    
+@api_view(['GET'])
+@permission_classes([AllowAny])
+def get_previous_next_subtopic(request, topic_slug, subtopic_id):
+    topic = get_object_or_404(TopicListen, slug=topic_slug)
+    current_subtopic = get_object_or_404(Subtopic, id=subtopic_id, topic=topic)
+
+    previous_subtopic = Subtopic.objects.filter(topic=topic, id__lt=current_subtopic.id).order_by('-id').first()
+    next_subtopic = Subtopic.objects.filter(topic=topic, id__gt=current_subtopic.id).order_by('id').first()
+
+    return JsonResponse({
+        'previous': {
+            'id': previous_subtopic.id,
+            'slug': previous_subtopic.slug,
+            'url': f"/topics/listen/{topic.slug}/subtopics/{previous_subtopic.slug}/listen-and-type/"
+        } if previous_subtopic else None,
+        'next': {
+            'id': next_subtopic.id,
+            'slug': next_subtopic.slug,
+            'url': f"/topics/listen/{topic.slug}/subtopics/{next_subtopic.slug}/listen-and-type/"
+        } if next_subtopic else None
+    })
+
+# <Render templates HTML files>
+def home_page(request):
+    return render(request, 'home.html')
+
+# User template
+def login_page(request):
+    return render(request, 'login.html')
+
+def register_page(request):
+    return render(request, 'register.html')
+
+def change_password_page(request):
+    return render(request, 'change_password.html')
+
+def account_page(request):
+    return render(request, 'user_account.html')
+
+# Listen templates
+def topics_view_page(request):
+    return render(request, 'topics_view.html')
+
+def topic_detail_page(request, topic_slug):
+    topic = get_object_or_404(TopicListen,slug=topic_slug)
+    sections = Section.objects.filter(topic=topic).prefetch_related('subtopics')
+    return render(request, 'topic_detail.html', {'topic':topic, 'sections':sections})
+
+def listen_and_type_page(request, topic_slug, subtopic_slug):
+    topic = get_object_or_404(TopicListen, slug=topic_slug)
+    subtopic = get_object_or_404(Subtopic, slug=subtopic_slug)
+
+    exercises = AudioExercise.objects.filter(subtopic=subtopic).order_by('id','position')
+    return render(
+        request,
+        'listen_and_type.html',
+        {
+            'topic':topic,
+            'subtopic':subtopic,
+            'exercises': exercises
+        }
+    )
 
 def grammar_page(request):
     return render(request, 'grammar.html')
+# </Render templates HTML files>
 
 
 # Cấu hình Gemini
@@ -456,6 +444,23 @@ embedding_model = HuggingFaceEmbeddings(model_name="sentence-transformers/all-Mi
 
 # Load lại Chroma
 vector_db = Chroma(persist_directory="./chroma_english_learning", embedding_function=embedding_model)
+# @csrf_exempt
+# def gemini_chat_view(request):
+#     if request.method == 'POST':
+#         try:
+#             data = json.loads(request.body)
+#             message = data.get('message')
+#             topic = data.get('topic', 'General')
+
+#             system_prompt = f"You are an English learning assistant. Respond in a friendly, helpful way about: {topic}."
+#             full_prompt = f"{system_prompt}\nUser: {message}\nAssistant:"
+
+#             response = model.generate_content(full_prompt)
+#             return JsonResponse({'response': response.text.strip()})
+#         except Exception as e:
+#             return JsonResponse({'error': str(e)}, status=500)
+#     return JsonResponse({'error': 'Invalid request'}, status=400)
+
 
 @csrf_exempt
 def gemini_chat_view(request):
@@ -471,15 +476,15 @@ def gemini_chat_view(request):
             print("Retrieved Context:", context)
             # 🔧 Prompt
             prompt = f"""
-            You are an English learning assistant.
-            Use the context below to help the user with the topic: {topic}.
+You are an English learning assistant.
+Use the context below to help the user with the topic: {topic}.
 
-            Context:
-            {context}
+Context:
+{context}
 
-            User: {message}
-            Assistant:
-            """
+User: {message}
+Assistant:
+"""
 
             # 💬 Gửi vào Gemini
             response = model.generate_content(prompt)
@@ -492,4 +497,3 @@ def gemini_chat_view(request):
 
 def profile_view(request):
     return HttpResponse("You are logged in!")
-

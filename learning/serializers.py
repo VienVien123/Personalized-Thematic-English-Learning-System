@@ -1,5 +1,5 @@
 from rest_framework import serializers
-from .models import User, Subtopic, Section, TopicListen, AudioExercise, TopicVocab, Word
+from .models import User, TopicListen, Section, Subtopic, AudioExercise, TopicVocab, Word
 from rest_framework_simplejwt.tokens import RefreshToken
 from rest_framework_simplejwt.exceptions import TokenError, InvalidToken
 from PIL import Image, ImageDraw, ImageFont
@@ -48,6 +48,22 @@ class RegisterSerializer(serializers.ModelSerializer):
         user.avatar.save(f"{initials}.png", avatar_file)
         return user
 
+    
+    # def create_avater_image(self, initials):
+    #     size = (100,100)
+    #     image = Image.new('RGB', size, color=(52,152,219))
+    #     draw = ImageDraw.Draw(image)
+
+    #     try:
+    #         font = ImageFont.truetype("/usr/share/fonts/truetype/dejavu/DejaVuSans-Bold.ttf", 36)
+    #     except:
+    #         font = ImageFont.load_default()
+
+    #     w,h = draw.textSize(initials, font=font)
+    #     draw.text(((size[0]-w)/2, (size[1]-h)/2), initials, fill='white', font=font)
+    #     buffer = BytesIO()
+    #     image.save(buffer, format="PNG")
+    #     return ContentFile(buffer.getvalue(), f"{initials}.png")
 
     def create_avatar_image(self, initials):
         # Tạo ảnh từ chữ cái đầu (ví dụ: "JD")
@@ -88,6 +104,8 @@ class LogoutSerializer(serializers.Serializer):
         except TokenError as e:
             raise serializers.ValidationError({'refresh': 'Token is invalid or already blacklisted'})
 
+from rest_framework import serializers
+
 class ChangePasswordSerializer(serializers.Serializer):
     old_password = serializers.CharField(required=True, write_only=True, style={'input_type': 'password'})
     new_password = serializers.CharField(required=True, write_only=True, style={'input_type': 'password'})
@@ -111,7 +129,7 @@ class ChangePasswordSerializer(serializers.Serializer):
         user.set_password(self.validated_data['new_password'])
         user.save()
         return user    
-
+    
 # Listening 
 class SubtopicSerializer(serializers.ModelSerializer):
     class Meta:
@@ -137,7 +155,6 @@ class AudioExerciseSerializer(serializers.ModelSerializer):
     class Meta:
         model = AudioExercise
         fields = "__all__"
-    
 class WordSerializer(serializers.ModelSerializer):
     class Meta:
         model = Word
