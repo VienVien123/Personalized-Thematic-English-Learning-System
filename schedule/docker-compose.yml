@@ -1,0 +1,33 @@
+services:
+  airflow-db:
+    image: postgres:13
+    container_name: airflow-db
+    env_file:
+      - .env
+    ports:
+      - 5439:5432
+    networks:
+      - metaupdate
+
+  data-update:
+    container_name: data-update
+    build: .
+    env_file:
+      - .env
+    user: "${AIRFLOW_UID:-50000}:0"
+    volumes:
+      - ./log:/var/log/vien
+      - ./dags:/opt/airflow/dags
+    ports:
+      - 8090:8080
+    command: bash -c '(${AIRFLOW_DB_INIT_COMMAND} && ${AIRFLOW_USER_CREATE_COMMAND}); ${AIRFLOW_COMMAND}'
+    networks:
+      - metaupdate
+volumes:
+  dags:
+  data_local:
+
+networks:
+  metaupdate:
+    name: metaupdate
+    driver: bridge
