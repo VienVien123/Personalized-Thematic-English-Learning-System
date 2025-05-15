@@ -1,0 +1,75 @@
+{% extends 'base.html' %}
+{% load static %}
+
+{% block content %}
+<div class="container mt-5">
+    <!-- Tabs Navigation -->
+    <ul class="nav nav-tabs mb-4" id="vocabularyTabs" role="tablist">
+        <li class="nav-item" role="presentation">
+            <button class="nav-link active" id="my-vocab-tab" data-bs-toggle="tab" data-bs-target="#my-vocab" type="button" role="tab">
+                Từ vựng của tôi
+            </button>
+        </li>
+        <li class="nav-item" role="presentation">
+            <button class="nav-link" id="topics-tab" data-bs-toggle="tab" data-bs-target="#topics" type="button" role="tab">
+                Học theo chủ đề
+            </button>
+        </li>
+    </ul><div class="tab-content" id="vocabularyTabContent">
+        <!-- My Vocabulary Tab -->
+        <div class="tab-pane fade show active" id="my-vocab" role="tabpanel">
+            <div class="mb-4">
+                <button class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#addWordModal">
+                    <i class="fas fa-plus"></i> Thêm từ mới
+                </button>
+            </div>
+            <div class="row row-cols-1 row-cols-sm-2 row-cols-md-3 g-4" id="myWordsGrid">
+                <div class="alert alert-info">Chọn tab để tải từ vựng của bạn.</div>
+            </div>
+        </div>
+
+        <!-- Topics Tab -->
+        <div class="tab-pane fade" id="topics" role="tabpanel">
+            <div id="supabaseTopicsGrid" class="row row-cols-1 row-cols-sm-2 row-cols-md-3 g-4 justify-content-center">
+                <div class="alert alert-info">Chọn tab để tải chủ đề.</div>
+            </div>
+        </div>
+    </div>
+</div>
+<!-- Modal for Adding New Word -->
+<div class="modal fade" id="addWordModal" tabindex="-1" aria-labelledby="addWordModalLabel" aria-hidden="true">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title" id="addWordModalLabel">Thêm từ mới</h5>
+                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+            </div>
+            <div class="modal-body">
+                <form id="addWordForm">
+                    <div class="mb-3">
+                        <label for="wordInput" class="form-label">Từ tiếng Anh</label>
+                        <input type="text" class="form-control" id="wordInput" required>
+                    </div>
+                    <div class="mb-3">
+                        <label for="definitionInput" class="form-label">Nghĩa tiếng Việt</label>
+                        <textarea class="form-control" id="definitionInput" rows="3"></textarea>
+                    </div>
+                    <div class="mb-3">
+                        <label for="exampleInput" class="form-label">Ví dụ</label>
+                        <textarea class="form-control" id="exampleInput" rows="3"></textarea>
+                    </div>
+                    <div class="mb-3">
+                        <label for="topicInput" class="form-label">Chủ đề</label>
+                        <select class="form-select" id="topicInput">
+                            <option value="">Không chọn</option>
+                        </select>
+                    </div>
+                </form>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Hủy</button>
+                <button type="button" class="btn btn-primary" id="saveWordBtn">Lưu</button>
+            </div>
+        </div>
+    </div>
+</div>
