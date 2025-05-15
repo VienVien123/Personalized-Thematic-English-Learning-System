@@ -38,4 +38,9 @@ urlpatterns = [
 
     # Grammar
     path('grammar/', views.grammar_page, name='grammar'),
+
+    # chat rag germini
+    path('api/chatbot/gemini/', views.gemini_chat_view, name='gemini_chat'),
+    path('page/home', views.home_page, name='home'),
+
 ]
