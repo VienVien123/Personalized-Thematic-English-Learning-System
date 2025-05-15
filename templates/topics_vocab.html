@@ -72,7 +72,7 @@ document.addEventListener('DOMContentLoaded', function () {
         const token = localStorage.getItem('access');
         if (!token) {
             alert("Bạn cần đăng nhập để sử dụng chức năng này.");
-            window.location.href = "/login/";
+            window.location.href = "{% url 'login_page' %}";
             return;
         }
 

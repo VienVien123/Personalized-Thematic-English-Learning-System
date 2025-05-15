@@ -80,6 +80,10 @@ class LoginView(generics.GenericAPIView):
     serializer_class=LoginSerializer
     permission_classes = [AllowAny]
 
+    def get(self, request, *args, **kwargs):
+        # Nếu muốn chuyển hướng từ API tới trang đăng nhập
+        return redirect('login_page')  # Chuyển hướng tới trang đăng nhập HTML
+    
     def post(self, request, *args, **kwargs):
         serializer = self.get_serializer(data=request.data)
         serializer.is_valid(raise_exception=True)
