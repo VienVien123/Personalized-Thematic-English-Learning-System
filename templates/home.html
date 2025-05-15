@@ -1,0 +1,155 @@
+{% extends 'base.html' %}
+{% load static %}
+
+{% block title %}Home - English Learning Platform{% endblock %}
+
+{% block content %}
+<!-- Hero Section -->
+<section class="hero">
+    <div class="container">
+        <div class="row justify-content-center">
+            <div class="col-lg-8 text-center">
+                <h1 class="display-4 fw-bold mb-4">The free, fun, and effective way to learn a language!</h1>
+                <p class="lead mb-4">Join millions of learners worldwide and start your English learning journey today.</p>
+                <button class="btn btn-light btn-lg btn-get-started" data-bs-toggle="modal" data-bs-target="#getStartedModal">
+                    Get Started
+                </button>
+            </div>
+        </div>
+    </div>
+</section>
+
+<!-- Features Section -->
+<section class="py-5">
+    <div class="container">
+        <h2 class="text-center mb-5">Why Choose Our Platform?</h2>
+        <div class="row g-4">
+            <div class="col-md-4">
+                <div class="card feature-card h-100">
+                    <div class="card-body text-center">
+                        <i class="fas fa-book-open fa-3x text-primary mb-3"></i>
+                        <h3 class="card-title h4">Comprehensive Learning</h3>
+                        <p class="card-text">Access a wide range of vocabulary, grammar lessons, and interactive exercises.</p>
+                    </div>
+                </div>
+            </div>
+            <div class="col-md-4">
+                <div class="card feature-card h-100">
+                    <div class="card-body text-center">
+                        <i class="fas fa-robot fa-3x text-primary mb-3"></i>
+                        <h3 class="card-title h4">AI-Powered Assistant</h3>
+                        <p class="card-text">Get instant help and practice conversations with our intelligent chatbot.</p>
+                    </div>
+                </div>
+            </div>
+            <div class="col-md-4">
+                <div class="card feature-card h-100">
+                    <div class="card-body text-center">
+                        <i class="fas fa-chart-line fa-3x text-primary mb-3"></i>
+                        <h3 class="card-title h4">Track Your Progress</h3>
+                        <p class="card-text">Monitor your learning journey with detailed progress tracking and statistics.</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</section>
+
+<!-- Topics Preview Section -->
+<section class="bg-light py-5">
+    <div class="container">
+        <h2 class="text-center mb-5">Popular Learning Topics</h2>
+        <div class="row g-4">
+            <div class="col-md-4">
+                {% comment %} <div class="topic-card" style="background-image: url('https://source.unsplash.com/random/800x600?travel')">
+                    <div class="topic-card-content">
+                        <h3>Travel</h3>
+                        <p>Learn essential phrases for your next adventure.</p>
+                    </div>
+                </div> {% endcomment %}
+                <div class="topic-card" style="background-image: url('{% static 'img/travel.png' %}')">
+                    <div class="topic-card-content">
+                        <h3>Travel</h3>
+                        <p>Learn essential phrases for your next adventure.</p>
+                    </div>
+                </div>                
+            </div>
+            <div class="col-md-4">
+                <div class="topic-card" style="background-image: url('{% static 'img/bussiness.png' %}')">
+                    <div class="topic-card-content">
+                        <h3>Business</h3>
+                        <p>Master professional English communication.</p>
+                    </div>
+                </div>
+            </div>
+            <div class="col-md-4">
+                <div class="topic-card" style="background-image: url('{% static 'img/daily_life.png' %}')">
+                    <div class="topic-card-content">
+                        <h3>Daily Life</h3>
+                        <p>Practice everyday conversations and situations.</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="text-center mt-4">
+            <a href="" class="btn btn-primary btn-lg">Explore All Topics</a>
+        </div>
+    </div>
+</section>
+
+<!-- Stats Section -->
+<section class="py-5">
+    <div class="container">
+        <div class="row text-center">
+            <div class="col-md-4 mb-4">
+                <div class="progress-circle" data-percent="95">
+                    <span>95%</span>
+                </div>
+                <h4 class="mt-3">Student Satisfaction</h4>
+            </div>
+            <div class="col-md-4 mb-4">
+                <div class="progress-circle" data-percent="100">
+                    <span>1M+</span>
+                </div>
+                <h4 class="mt-3">Active Learners</h4>
+            </div>
+            <div class="col-md-4 mb-4">
+                <div class="progress-circle" data-percent="80">
+                    <span>15K+</span>
+                </div>
+                <h4 class="mt-3">Practice Exercises</h4>
+            </div>
+        </div>
+    </div>
+</section>
+
+<!-- CTA Section -->
+<section class="bg-primary text-white py-5">
+    <div class="container text-center">
+        <h2 class="mb-4">Ready to Start Your English Learning Journey?</h2>
+        <p class="lead mb-4">Join our community of learners and achieve your language goals.</p>
+        <button class="btn btn-light btn-lg btn-get-started" data-bs-toggle="modal" data-bs-target="#getStartedModal">
+            Get Started Now
+        </button>
+    </div>
+</section>
+
+<!-- Get Started Modal -->
+<div class="modal fade" id="getStartedModal" tabindex="-1">
+    <div class="modal-dialog modal-dialog-centered">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title">Get Started with English Learning</h5>
+                <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
+            </div>
+            <div class="modal-body text-center">
+                <div class="d-grid gap-3">
+                    <a href="" class="btn btn-primary btn-lg">Login</a>
+                    <a href="" class="btn btn-outline-primary btn-lg">Register</a>
+                    <a href="" class="btn btn-outline-secondary btn-lg">Try Without Account</a>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %} 

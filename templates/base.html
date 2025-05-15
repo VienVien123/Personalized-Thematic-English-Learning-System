@@ -1,0 +1,162 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>{% block title %}English Learning Platform{% endblock %}</title>
+    
+    <!-- Bootstrap 5 CSS -->
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+    <!-- Font Awesome -->
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" rel="stylesheet">
+    <!-- Custom CSS -->
+    <link href="{% static 'css/style.css' %}" rel="stylesheet">
+    {% block extra_css %}{% endblock extra_css%}
+</head>
+<body>
+    <!-- Navigation -->
+    <nav class="navbar navbar-expand-lg navbar-light bg-white fixed-top shadow-sm">
+        <div class="container">
+            <a class="navbar-brand d-flex align-items-center" href="{% url 'home' %}">
+                <img src="{% static 'img/Logo_caheo.png' %}" alt="Logo" height="40" class="me-2">
+                <span class="fw-bold">English Learning</span>
+            </a>
+            <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav">
+                <span class="navbar-toggler-icon"></span>
+            </button>
+            <div class="collapse navbar-collapse" id="navbarNav">
+                <ul class="navbar-nav ms-auto">
+                    <li class="nav-item">
+                        <a class="nav-link" href="{% url 'home' %}">Home</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" href="">Vocabulary</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" href="">Grammar</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" href="">Listening</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" href="#exercises">Exercises</a>
+                    </li>
+                    <li class="nav-item dropdown" id="user-nav">
+                        <a class="nav-link dropdown-toggle d-flex align-items-center gap-2" href="#" id="navbarDropdown" role="button" data-bs-toggle="dropdown">
+                            <div id="header-avatar" class="rounded-circle overflow-hidden d-flex align-items-center justify-content-center" style="width: 36px; height: 36px;">
+                                <img id="user-avatar-img"
+                                     class="w-100 h-100 object-fit-cover rounded-circle"
+                                     style="display: none; z-index: 1;">
+                                <span id="user-avatar-initial"
+                                     class="text-white bg-primary fw-bold rounded-circle d-flex align-items-center justify-content-center"
+                                     style="font-size: 0.9rem; width: 100%; height: 100%; display: none;">
+                                     U
+                                </span>
+                            </div>
+                            <span id="user-name-display" class="fw-medium">User</span>
+                        </a>                        
+                        <ul class="dropdown-menu dropdown-menu-end">
+                            <li><a class="dropdown-item" href="account">Trang cá nhân</a></li>
+                            <li><a class="dropdown-item" href="">Quản lý tài khoản</a></li>
+                            <li><hr class="dropdown-divider"></li>
+                            <li><a class="dropdown-item" href="#" id="logoutlink">Đăng xuất</a></li>
+                        </ul>
+                    </li>
+                    
+                    <li class="nav-item" id="nav-login">
+                        <a class="nav-link" href="">Login</a>
+                    </li>
+                    <li class="nav-item" id="nav-register">
+                        <a class="nav-link" href="">Register</a>
+                    </li>
+                </ul>
+            </div>
+        </div>
+    </nav>
+
+    <!-- Messages -->
+    {% if messages %}
+        <div class="container mt-5 pt-5">
+            {% for message in messages %}
+                <div class="alert alert-{{ message.tags }} alert-dismissible fade show" role="alert">
+                    {{ message }}
+                    <button type="button" class="btn-close" data-bs-dismiss="alert"></button>
+                </div>
+            {% endfor %}
+        </div>
+    {% endif %}
+
+    <!-- Main Content -->
+    <main class="mt-5 pt-5">
+        {% block content %}
+            {% block backToTop %}{% endblock backToTop %}
+        {% endblock content%}
+    </main>
+
+    <!-- Footer -->
+    <footer class="bg-light py-5 mt-5">
+        <div class="container">
+            <div class="row">
+                <div class="col-md-4">
+                    <h5>About Us</h5>
+                    <p>We are dedicated to helping you improve your English skills through interactive learning and practice.</p>
+                </div>
+                <div class="col-md-4">
+                    <h5>Quick Links</h5>
+                    <ul class="list-unstyled">
+                        <li><a href="">Vocabulary</a></li>
+                        <li><a href="">Grammar</a></li>
+                        <li><a href="">Listening</a></li>
+                        <li><a href="#exercises">Exercises</a></li>
+                    </ul>
+                </div>
+                <div class="col-md-4">
+                    <h5>Contact Us</h5>
+                    <ul class="list-unstyled">
+                        <li><i class="fas fa-envelope"></i> support@englishlearning.com</li>
+                        <li><i class="fas fa-phone"></i> +1 234 567 890</li>
+                    </ul>
+                </div>
+            </div>
+            <hr>
+            <div class="text-center">
+                <p class="mb-0">&copy; 2024 English Learning Platform. All rights reserved.</p>
+            </div>
+        </div>
+    </footer>
+
+    <!-- Chatbot Widget -->
+    <div class="chatbot-widget">
+        <button class="chatbot-toggle" id="chatbotToggle">
+            <i class="fas fa-comments"></i>
+        </button>
+        <div class="chatbot-container" id="chatbotContainer">
+            <div class="chatbot-header">
+                <h5>AI Assistant</h5>
+                <button class="chatbot-close" id="chatbotClose">
+                    <i class="fas fa-times"></i>
+                </button>
+            </div>
+            <div class="chatbot-messages" id="chatbotMessages">
+                <div class="message bot">
+                    Hello! How can I help you today?
+                </div>
+            </div>
+            <div class="chatbot-input">
+                <input type="text" id="chatbotInput" placeholder="Type your message...">
+                <button id="chatbotSend">
+                    <i class="fas fa-paper-plane"></i>
+                </button>
+            </div>
+        </div>
+    </div>
+
+    <!-- Bootstrap JS Bundle -->
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+    <!-- Custom JS -->
+    <script src="{% static 'js/main.js' %}?{% now 'U' %}"></script>
+    <script src="{% static 'js/navbar.js' %}"></script>     
+    {% block extra_js %}{% endblock extra_js %}
+</body>
+</html> 
