@@ -39,8 +39,26 @@ urlpatterns = [
     # Grammar
     path('grammar/', views.grammar_page, name='grammar'),
 
+    # Vocabulary
+    path('vocabulary/', views.vocabulary, name='vocabulary'),
+
+    # Từ của user (gọi Supabase)
+    path('api/user-words/', views.get_user_words, name='get_user_words'),
+    path('api/user-words/add/', views.add_user_word, name='add_user_word'),
+    path('api/user-words/edit/<int:word_id>/', views.edit_user_word, name='edit_user_word'),
+    path('api/user-words/delete/<int:word_id>/', views.delete_user_word, name='delete_user_word'),
+
+    # Từ hệ thống
+    path('api/topics/vocab/', views.get_topics, name='get_topics'),
+    path('api/vocabulary/<str:topic_name>/', views.get_vocabulary_by_topic, name='get_vocabulary_by_topic'),
+    path('topics/vocab/', views.topics, name='topics'),
+
+    # sửa 
+    # API lấy từ vựng theo chủ đề
+    path('api/words/<str:topic>/', views.get_words_by_topic, name='get_words_by_topic'),  
+    path('api/words/', views.add_word, name='add_word'),
+    path('api/my-vocabulary/', views.get_user_vocabulary, name='get_user_vocabulary'),
+
     # chat rag germini
     path('api/chatbot/gemini/', views.gemini_chat_view, name='gemini_chat'),
-    path('page/home', views.home_page, name='home'),
-
 ]

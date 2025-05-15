@@ -24,18 +24,19 @@ import google.generativeai as genai
 from dotenv import load_dotenv
 from langchain_community.vectorstores import Chroma
 from langchain.embeddings import HuggingFaceEmbeddings
+import re
 
-
-import environ
 from django.views.decorators.csrf import csrf_exempt
 
 from .serializers import (
     UserSerializer, RegisterSerializer, LoginSerializer, LogoutSerializer, ChangePasswordSerializer,
-    TopicListenSerializer, SectionSerializer, SubtopicSerializer, AudioExerciseSerializer
+    TopicListenSerializer, SectionSerializer, SubtopicSerializer, AudioExerciseSerializer,
+    TopicVocabSerializer, WordSerializer
 )
 
 from .models import (
-    User, TopicListen, Section, Subtopic, AudioExercise
+    User, TopicListen, Section, Subtopic, AudioExercise,
+    TopicVocab, Word
 )
 
 load_dotenv()
@@ -276,6 +277,169 @@ def listen_and_type_page(request, topic_slug, subtopic_slug):
         }
     )
 
+# Vocabulary templates
+# ------------------ Web Pages ------------------
+def topics(request):
+    topics_list = TopicVocab.objects.all()
+    return render(request, 'topics_vocab.html', {'topics_vocab': topics_list})
+
+def vocabulary(request):
+    jwt_authenticator = JWTAuthentication()
+    user = None
+
+    # Xác thực JWT từ Authorization header
+    try:
+        header = request.headers.get("Authorization", None)
+        if header:
+            # Header có dạng "Bearer <token>"
+            token = header.split(" ")[1] if " " in header else header
+            validated_token = jwt_authenticator.get_validated_token(token)
+            user = jwt_authenticator.get_user(validated_token)
+    except (InvalidToken, TokenError, IndexError, AttributeError):
+        user = None
+
+    return render(request, 'vocabulary.html', {
+        "SUPABASE_URL": settings.SUPABASE_URL,
+        "SUPABASE_API_KEY": settings.SUPABASE_API_KEY,
+        "USER_ID": user.id if user else None
+    })
+
+# ------------------ API: USER WORDS ------------------
+
+@api_view(['GET'])
+@permission_classes([IsAuthenticated])
+def get_user_words(request):
+    url = f"{SUPABASE_URL}/rest/v1/learning_word?user_id=eq.{request.user.id}&select=*"
+    r = requests.get(url, headers=HEADERS)
+    return JsonResponse(r.json(), safe=False, status=r.status_code)
+
+@api_view(['POST'])
+@permission_classes([IsAuthenticated])
+def add_user_word(request):
+    try:
+        # Đảm bảo request body là JSON
+        print("Request Content-Type:", request.content_type)
+        print("Raw Request Body:", request.body)
+
+        if request.content_type != "application/json":
+            return Response({"error": "Content-Type must be application/json"}, status=400)
+
+        if not request.body:
+            return Response({"error": "Request body cannot be empty"}, status=400)
+
+        data = json.loads(request.body)
+        
+        # Tạo payload cho Supabase
+        payload = {
+            "user_id": request.user.id,
+            "word": data.get("word"),
+            "definition": data.get("definition", ""),
+            "example": data.get("example", ""),
+            "topic": data.get("topic", ""),
+            "is_learned": False
+        }
+
+        print("Parsed Request Payload:", payload)
+
+        # Gọi API Supabase
+        response = requests.post(
+            f"{SUPABASE_URL}/rest/v1/learning_word",
+            headers=HEADERS,
+            json=payload
+        )
+
+        # Debug request và response
+        print("Supabase Request URL:", response.url)
+        print("Supabase Response Status Code:", response.status_code)
+        print("Supabase Response Text:", response.text)
+
+        # Xử lý phản hồi từ Supabase
+        if response.status_code in [200, 201]:
+            try:
+                return Response(response.json(), status=response.status_code)
+            except json.JSONDecodeError:
+                return Response({"error": "Invalid response from Supabase. Not JSON."}, status=500)
+        else:
+            return Response({
+                "error": "Unable to add user word",
+                "details": response.text
+            }, status=response.status_code)
+
+    except requests.RequestException as e:
+        print("Error while connecting to Supabase:", str(e))
+        return Response({"error": "Connection error to Supabase."}, status=500)
+    except Exception as e:
+        print("Internal Server Error:", str(e))
+        return Response({"error": "Internal server error.", "details": str(e)}, status=500)
+
+
+@api_view(['PUT'])
+@permission_classes([IsAuthenticated])
+def edit_user_word(request, word_id):
+    data = json.loads(request.body)
+    payload = {
+        "word": data.get("word"),
+        "definition": data.get("definition"),
+        "example": data.get("example"),
+        "topic": data.get("topic"),
+        "is_learned": data.get("is_learned", False)
+    }
+    url = f"{SUPABASE_URL}/rest/v1/learning_word?id=eq.{word_id}&user_id=eq.{request.user.id}"
+    r = requests.patch(url, headers=HEADERS, json=payload)
+    return JsonResponse({"status": "updated"} if r.status_code == 204 else r.text, status=r.status_code)
+
+@api_view(['DELETE'])
+@permission_classes([IsAuthenticated])
+def delete_user_word(request, word_id):
+    url = f"{SUPABASE_URL}/rest/v1/learning_word?id=eq.{word_id}&user_id=eq.{request.user.id}"
+    r = requests.delete(url, headers=HEADERS)
+    return JsonResponse({"status": "deleted"} if r.status_code == 204 else r.text, status=r.status_code)
+
+# ------------------ API: SYSTEM DATA (TOPICS & VOCABULARY) ------------------
+@api_view(['GET'])
+@permission_classes([IsAuthenticated])
+def get_topics(request):
+    topics_list = TopicVocab.objects.all()
+    serializer = TopicVocabSerializer(topics_list, many=True)
+    return Response(serializer.data)
+    
+@api_view(['GET'])
+@permission_classes([AllowAny])
+def get_vocabulary_by_topic(request, topic_name):
+    url = f"{SUPABASE_URL}/rest/v1/vocabulary?topic=eq.{topic_name}&select=english,vietnamese,ipa,type"
+    r = requests.get(url, headers=HEADERS)
+    return JsonResponse(r.json(), safe=False, status=r.status_code)
+    
+@api_view(['GET'])
+def get_words_by_topic(request, topic):
+    print(topic)
+    words = TopicVocab.objects.filter(topic=topic)
+    if not words:
+        return Response({'message': 'Không có từ vựng nào'}, status=status.HTTP_404_NOT_FOUND)
+    serializer = TopicVocabSerializer(words, many=True)
+    print(serializer.data)
+    return Response(serializer.data, status=status.HTTP_200_OK)
+
+@api_view(['GET'])
+@permission_classes([IsAuthenticated])
+def get_user_vocabulary(request):
+    user = request.user  # JWT xác thực tự động lấy user
+    print("Authenticated User:", user)
+    
+    words = Word.objects.filter(user=user)
+    serializer = WordSerializer(words, many=True)
+    return Response(serializer.data, status=200)
+
+@api_view(['POST'])
+def add_word(request):
+    if request.method == 'POST':
+        serializer = WordSerializer(data=request.data)
+        if serializer.is_valid():
+            serializer.save(user=request.user)  
+            return Response(serializer.data, status=status.HTTP_201_CREATED)
+        return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
+
+
 def grammar_page(request):
     return render(request, 'grammar.html')
 
@@ -303,15 +467,15 @@ def gemini_chat_view(request):
             print("Retrieved Context:", context)
             # 🔧 Prompt
             prompt = f"""
-You are an English learning assistant.
-Use the context below to help the user with the topic: {topic}.
+            You are an English learning assistant.
+            Use the context below to help the user with the topic: {topic}.
 
-Context:
-{context}
+            Context:
+            {context}
 
-User: {message}
-Assistant:
-"""
+            User: {message}
+            Assistant:
+            """
 
             # 💬 Gửi vào Gemini
             response = model.generate_content(prompt)
@@ -324,3 +488,4 @@ Assistant:
 
 def profile_view(request):
     return HttpResponse("You are logged in!")
+

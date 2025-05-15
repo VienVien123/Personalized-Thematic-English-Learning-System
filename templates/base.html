@@ -31,7 +31,7 @@
                         <a class="nav-link" href="{% url 'home' %}">Home</a>
                     </li>
                     <li class="nav-item">
-                        <a class="nav-link" href="#">Vocabulary</a>
+                        <a class="nav-link" href="{% url 'vocabulary' %}">Vocabulary</a>
                     </li>
                     <li class="nav-item">
                         <a class="nav-link" href="{% url 'grammar' %}">Grammar</a>
@@ -64,12 +64,46 @@
                         </ul>
                     </li>
                     
-                    <li class="nav-item" id="nav-login">
+                    <!-- <li class="nav-item" id="nav-login">
                         <a class="nav-link" href="{% url 'login_page' %}">Login</a>
                     </li>
                     <li class="nav-item" id="nav-register">
                         <a class="nav-link" href="{% url 'register_page' %}">Register</a>
-                    </li>
+                    </li> -->
+                    {% if user.is_authenticated %}
+    <!-- Đã đăng nhập -->
+    <li class="nav-item dropdown" id="user-nav">
+        <a class="nav-link dropdown-toggle d-flex align-items-center gap-2" href="#" id="navbarDropdown" role="button" data-bs-toggle="dropdown">
+            <div id="header-avatar" class="rounded-circle overflow-hidden d-flex align-items-center justify-content-center" style="width: 36px; height: 36px;">
+                <span class="text-white bg-primary fw-bold rounded-circle d-flex align-items-center justify-content-center"
+                      style="font-size: 0.9rem; width: 100%; height: 100%;">
+                      {{ user.email|first|upper }}
+                </span>
+            </div>
+            <span id="user-name-display" class="fw-medium">{{ user.email }}</span>
+        </a>                        
+        <ul class="dropdown-menu dropdown-menu-end">
+            <li><a class="dropdown-item" href="#">Trang cá nhân</a></li>
+            <li><a class="dropdown-item" href="{% url 'account_page' %}">Quản lý tài khoản</a></li>
+            <li><hr class="dropdown-divider"></li>
+            <li>
+                <form method="POST" action="{% url 'account_logout' %}">
+                    {% csrf_token %}
+                    <button class="dropdown-item" type="submit">Đăng xuất</button>
+                </form>
+            </li>
+        </ul>
+    </li>
+{% else %}
+    <!-- Chưa đăng nhập -->
+    <li class="nav-item" id="nav-login">
+        <a class="nav-link" href="{% url 'login_page' %}">Login</a>
+    </li>
+    <li class="nav-item" id="nav-register">
+        <a class="nav-link" href="{% url 'register_page' %}">Register</a>
+    </li>
+{% endif %}
+
                 </ul>
             </div>
         </div>
@@ -105,7 +139,7 @@
                 <div class="col-md-4">
                     <h5>Quick Links</h5>
                     <ul class="list-unstyled">
-                        <li><a href="">Vocabulary</a></li>
+                        <li><a href="{% url 'vocabulary' %}">Vocabulary</a></li>
                         <li><a href="{% url 'grammar' %}">Grammar</a></li>
                         <li><a href="{% url 'topics_view_page' %}">Listening</a></li>
                         <li><a href="#exercises">Exercises</a></li>
@@ -139,7 +173,7 @@
                 </button>
             </div>
             <div class="chatbot-messages" id="chatbotMessages">
-                <div class="message bot">
+                <div class="message bot">   
                     Hello! How can I help you today?
                 </div>
             </div>

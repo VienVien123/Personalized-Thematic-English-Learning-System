@@ -1,5 +1,5 @@
 from rest_framework import serializers
-from .models import User, Subtopic, Section, TopicListen, AudioExercise
+from .models import User, Subtopic, Section, TopicListen, AudioExercise, TopicVocab, Word
 from rest_framework_simplejwt.tokens import RefreshToken
 from rest_framework_simplejwt.exceptions import TokenError, InvalidToken
 from PIL import Image, ImageDraw, ImageFont
@@ -137,3 +137,26 @@ class AudioExerciseSerializer(serializers.ModelSerializer):
     class Meta:
         model = AudioExercise
         fields = "__all__"
+    
+class WordSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = Word
+        fields = ['id', 'word', 'definition', 'example', 'topic', 'is_learned']
+        # fields = ['id', 'word', 'definition', 'example', 'category', 'topic', 'is_learned']
+        # fields = ['word', 'definition', 'example', 'is_learned']
+        # fields = [
+        #     'id', 'user', 'word', 'definition', 'example',
+        #     'topic', 'is_learned', 'synced', 'created_at', 'updated_at'
+        # ]
+
+    def validate_topic(self, value):
+        if value is None:
+            raise serializers.ValidationError("Chủ đề không được để trống.")
+        return value
+
+class TopicVocabSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = TopicVocab
+        fields = ['id', 'topic', 'english', 'ipa', 'type', 'vietnamese'] 
+        # fileds=['id','topic','english','ipa','type','vietnamese']
+        # fields = ['id', 'name', 'definition', 'example', 'category', 'synced']
