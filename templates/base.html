@@ -31,13 +31,13 @@
                         <a class="nav-link" href="{% url 'home' %}">Home</a>
                     </li>
                     <li class="nav-item">
-                        <a class="nav-link" href="">Vocabulary</a>
+                        <a class="nav-link" href="#">Vocabulary</a>
                     </li>
                     <li class="nav-item">
-                        <a class="nav-link" href="">Grammar</a>
+                        <a class="nav-link" href="#">Grammar</a>
                     </li>
                     <li class="nav-item">
-                        <a class="nav-link" href="">Listening</a>
+                        <a class="nav-link" href="#">Listening</a>
                     </li>
                     <li class="nav-item">
                         <a class="nav-link" href="#exercises">Exercises</a>
@@ -57,18 +57,18 @@
                             <span id="user-name-display" class="fw-medium">User</span>
                         </a>                        
                         <ul class="dropdown-menu dropdown-menu-end">
-                            <li><a class="dropdown-item" href="account">Trang cá nhân</a></li>
-                            <li><a class="dropdown-item" href="">Quản lý tài khoản</a></li>
+                            <li><a class="dropdown-item" href="#">Trang cá nhân</a></li>
+                            <li><a class="dropdown-item" href="{% url 'account_page' %}">Quản lý tài khoản</a></li>
                             <li><hr class="dropdown-divider"></li>
                             <li><a class="dropdown-item" href="#" id="logoutlink">Đăng xuất</a></li>
                         </ul>
                     </li>
                     
                     <li class="nav-item" id="nav-login">
-                        <a class="nav-link" href="">Login</a>
+                        <a class="nav-link" href="{% url 'login_page' %}">Login</a>
                     </li>
                     <li class="nav-item" id="nav-register">
-                        <a class="nav-link" href="">Register</a>
+                        <a class="nav-link" href="{% url 'register_page' %}">Register</a>
                     </li>
                 </ul>
             </div>
@@ -105,9 +105,9 @@
                 <div class="col-md-4">
                     <h5>Quick Links</h5>
                     <ul class="list-unstyled">
-                        <li><a href="">Vocabulary</a></li>
-                        <li><a href="">Grammar</a></li>
-                        <li><a href="">Listening</a></li>
+                        <li><a href="#">Vocabulary</a></li>
+                        <li><a href="#">Grammar</a></li>
+                        <li><a href="#">Listening</a></li>
                         <li><a href="#exercises">Exercises</a></li>
                     </ul>
                 </div>

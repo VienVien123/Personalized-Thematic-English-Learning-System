@@ -1,0 +1,108 @@
+{% extends 'base.html' %}
+{% load static %}
+{% block title %}Account Settings{% endblock title %}
+{% block content %}
+<div class="container mt-5 pt-5">
+  <div class="row">
+    <div class="col-md-3 border-end">
+      <ul class="nav flex-column">
+        <li class="nav-item mb-2">
+          <a class="nav-link active text-danger fw-bold">Thông tin tài khoản</a>
+        </li>
+        <li class="nav-item">
+          <a class="nav-link" href="{% url 'change_password_page' %}">Thay đổi mật khẩu</a>
+        </li>
+      </ul>
+    </div>
+
+    <div class="col-md-9">
+      <h4 class="mb-4">Thông tin tài khoản</h4>
+      <form id="account-info-form" enctype="multipart/form-data">
+        <div class="mb-3 d-flex align-items-center gap-3">
+          <img id="avatar-preview" src="" alt="Avatar" class="rounded-circle border" style="width: 60px; height: 60px; object-fit: cover;">
+          <input type="file" class="form-control form-control-sm w-auto" id="avatar" accept="image/*">
+        </div>
+
+        <!-- Các input người dùng -->
+        <div class="row">
+          <div class="mb-3 col-md-6">
+            <label class="form-label">Tên đăng nhập</label>
+            <input type="text" class="form-control" id="username" disabled>
+          </div>
+          <div class="mb-3 col-md-6">
+            <label class="form-label">Email</label>
+            <input type="email" class="form-control" id="email">
+          </div>
+          <div class="mb-3 col-md-6">
+            <label class="form-label">Họ và tên</label>
+            <input type="text" class="form-control" id="name">
+          </div>
+          <div class="mb-3 col-md-6">
+            <label class="form-label">Ngày sinh</label>
+            <input type="date" class="form-control" id="birthday">
+          </div>
+          <div class="mb-3 col-md-6">
+            <label class="form-label">Giới tính</label>
+            <select class="form-select" id="gender">
+              <option value="Nam">Nam</option>
+              <option value="Nữ">Nữ</option>
+              <option value="Khác">Khác</option>
+            </select>
+          </div>
+          <div class="mb-3 col-md-6">
+            <label class="form-label">Thành phố</label>
+            <input type="text" class="form-control" id="city">
+          </div>
+          <div class="mb-3 col-md-6">
+            <label class="form-label">Quận/Huyện</label>
+            <input type="text" class="form-control" id="district">
+          </div>
+          <div class="mb-3 col-md-6">
+            <label class="form-label">Phường/Xã</label>
+            <input type="text" class="form-control" id="ward">
+          </div>
+          <div class="mb-3 col-md-12">
+            <label class="form-label">Địa chỉ (tên đường)</label>
+            <input type="text" class="form-control" id="street">
+          </div>
+          <div class="mb-3 col-md-6">
+            <label class="form-label">Công ty</label>
+            <input type="text" class="form-control" id="company">
+          </div>
+          <div class="mb-3 col-md-6">
+            <label class="form-label">Chức vụ</label>
+            <input type="text" class="form-control" id="position">
+          </div>
+          <div class="mb-3 col-md-6">
+            <label class="form-label">Trường ĐH/CĐ</label>
+            <input type="text" class="form-control" id="university">
+          </div>
+          <div class="mb-3 col-md-6">
+            <label class="form-label">Chuyên ngành</label>
+            <input type="text" class="form-control" id="major">
+          </div>
+          <div class="mb-3 col-md-6">
+            <label class="form-label">Số điện thoại</label>
+            <input type="text" class="form-control" id="phone">
+          </div>
+          <div class="mb-3 col-md-6">
+            <label class="form-label">Link Facebook</label>
+            <input type="url" class="form-control" id="facebook">
+          </div>
+          <div class="mb-3 col-md-12">
+            <label class="form-label">Mô tả</label>
+            <textarea class="form-control" id="bio" rows="3"></textarea>
+          </div>
+        </div>
+
+        <div class="mb-3">
+          <button class="btn btn-primary w-100 rounded-pill" type="submit">Cập nhật thông tin</button>
+        </div>
+      </form>
+    </div>
+  </div>
+</div>
+{% endblock %}
+{% block extra_js %}
+<script src="{% static 'js/user_account.js' %}"></script>
+{% endblock extra_js %}

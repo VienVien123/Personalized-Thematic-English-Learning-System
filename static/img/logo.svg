@@ -1,0 +1,19 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<svg width="200" height="200" viewBox="0 0 200 200" xmlns="http://www.w3.org/2000/svg">
+    <!-- Background Circle -->
+    <circle cx="100" cy="100" r="90" fill="#007bff" opacity="0.1"/>
+    
+    <!-- Book Shape -->
+    <path d="M60 40 L140 40 L140 160 L60 160 Z" fill="#007bff"/>
+    <path d="M70 50 L130 50 L130 150 L70 150 Z" fill="white"/>
+    
+    <!-- Letter E -->
+    <path d="M85 70 L115 70 M85 100 L115 100 M85 130 L115 130" 
+          stroke="#007bff" 
+          stroke-width="8" 
+          stroke-linecap="round"/>
+    
+    <!-- Decorative Elements -->
+    <circle cx="100" cy="100" r="5" fill="#007bff"/>
+    <circle cx="100" cy="100" r="2" fill="white"/>
+</svg> 
