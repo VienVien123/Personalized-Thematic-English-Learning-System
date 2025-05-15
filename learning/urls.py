@@ -25,4 +25,6 @@ urlpatterns = [
    path('change_password/', views.change_password_page, name='change_password_page'),
    path('user/account/', views.account_page, name='account_page'),
 
+    # Grammar
+    path('grammar/', views.grammar_page, name='grammar'),
 ]

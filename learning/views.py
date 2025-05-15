@@ -134,7 +134,6 @@ class ChangePasswordView(generics.UpdateAPIView):
 def home_page(request):
     return render(request, 'home.html')
 
-# User template
 def login_page(request):
     return render(request, 'login.html')
 
@@ -146,3 +145,6 @@ def change_password_page(request):
 
 def account_page(request):
     return render(request, 'user_account.html')
+
+def grammar_page(request):
+    return render(request, 'grammar.html')

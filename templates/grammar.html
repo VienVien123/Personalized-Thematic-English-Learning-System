@@ -1,0 +1,894 @@
+{% extends "base.html" %}
+{% load static %}
+{% block content %}
+
+{% block extra_css %}
+<link rel="stylesheet" href="{% static '/css/grammar.css'%}?{% now 'U' %}">
+{% endblock extra_css %}
+
+<main>
+    <nav class="table-of-contents" style="margin-top: 40px;">
+        <h2>Mục Lục</h2>
+            <ul>
+                <li><a href="#overview"></a></li>
+                <li><a href="#present_simple">Present Simple (Hiện tại đơn)</a></li>
+                <li><a href="#present_continuous">Present Continuous (Hiện tại tiếp diễn)</a></li>
+                <li><a href="#present_perfect">Present Perfect (Hiện tại hoàn thành)</a></li>
+                <li><a href="#present_perfect_continuous">Present Perfect Continuous (Hiện tại hoàn thành tiếp diễn)</a></li>
+                <li><a href="#past_simple">Past Simple (Quá khứ đơn)</a></li>
+                <li><a href="#past_continuous">Past Continuous (Qúa khứ tiếp diễn)</a></li>
+                <li><a href="#past_perfect">Past Perfect (Qúa khứ hoàn thành)</a></li>
+                <li><a href="#past_perfect_continuous">Past Perfect Continuous (Qúa khứ hoàn thành tiếp  diễn)</a></li>
+                <li><a href="#ruture_simple">Future Simple (Tương lai đơn)</a></li>
+                <li><a href="#future_continuous">Future Continuous (Tương lai tiếp diễn)</a></li>
+                <li><a href="#future_perfect">Future Perfect (Tương lai hoàn thành)</a></li>
+                <li><a href="#future_perfect_continuous">Future Perfect Continuous (Tương lai hoàn thành tiếp diễn)</a></li>
+            </ul>
+    </nav>
+
+    <main>
+        <section id="overview">
+            <img src="https://sedu.edu.vn/public/upload/Bai-viet/tong-hop-cac-thi-tieng-anh-co-ban-cong-thuc-va-cach-dung-day-du/tong-hop-cac-thi-tieng-anh-co-ban-cong-thuc-va-cach-dung-day-du.jpg" alt="tổng quan">
+        </section>
+        <!-- 12 thì trong tiếng Anh -->
+        <section id="present_simple" class="tense">
+            <h2>Present Simple (Hiện tại đơn)</h2>
+            <h3>Cách sử dụng</h3>
+            <!-- <p>Thì hiện tại đơn dùng để diễn tả một hành động, một sự việc thường xuyên xảy ra hoặc được lặp đi lặp lai, hay một sự thật hiển nhiên hoặc lịch trình cố định.</p> -->
+            <p>Simple present thường dùng để diễn tả hành động xảy ra thường xuyên hoặc sự thật hiển nhiên trong hiện tại. Cụ thể gồm 6 cách dùng chính sau.</p>
+            <table>
+                <tr>
+                    <th>Cách dùng</th>
+                    <th>Ví dụ</th>
+                </tr>
+                <tr>
+                    <td>Miêu tả một sự thật hiển nhiên, một sự việc luôn đúng.</td>
+                    <td>Hanoi is Vietnam’s capital city. 
+
+                        (<i>Hà Nội là thành phố thủ đô của Việt Nam.</i>)</td>
+                </tr>
+                <tr>
+                    <td>Miêu tả thói quen</td>
+                    <td> I usually get up at six in the morning.
+                        (<i>Tôi thường thức dậy lúc 6 giờ sáng.</i>)</td>
+                </tr>
+                <tr>
+                    <td>Miêu tả những sắp xếp thời gian cố định, hoặc những kế hoạch chính thức và khả năng thay đổi rất khó </td>
+                    <td>The plane take off at 8am (<i>Máy bay cất cánh lúc 8 giờ sáng.</i>)</td>
+                </tr>
+                <tr>
+                    <td>Sử dụng trong câu hướng dẫn</td>
+                    <td>Go North for two blocks. The hospital is around the corner. 
+                        (<i>Đi về hướng Bắc qua hai dãy nhà. Bệnh viện ở ngay góc phố.</i>)</td>
+                </tr>
+                <tr>
+                    <td>Diễn tả những hành động ngắn đang xảy ra ở hiện tại (thường dùng trong kể chuyện hoặc bình luận thể thao)</td>
+                    <td>He takes the ball, he runs down the wing, and he scores!
+                        (<i>Anh ấy nhận bóng, chạy dọc cánh và ghi bàn!</i>)</td>
+                </tr>
+                <tr>
+                    <td> Miêu tả những đặc điểm, tính chất</td>
+                    <td>I usually get up at six in the morning.
+                        (<i>Tôi thường thức dậy lúc 6 giờ sáng.</i>)</td>
+                </tr>
+            </table>
+
+            <div id="frequency-adverbs">
+                <h3>Dấu hiệu nhận biết</h3>
+                <p>Các mệnh đề (<i>câu</i>) sử dụng thì hiện tại đơn thường chứa các cụm từ/trạng từ chỉ tần suất như sau: </p>
+                
+                <ul>
+                    <li>
+                        <strong>Trạng từ chỉ tần suất:</strong> 
+                        <em>Always (luôn luôn), usually (thường xuyên), seldom (hiếm khi), never (không bao giờ)...</em>
+                    </li>
+                    <li>
+                        <strong>Every + [mốc thời gian]:</strong> 
+                        every day <em>(mỗi ngày)</em>, every month <em>(mỗi tháng)</em>, 
+                        every year <em>(mỗi năm)</em>, every weekend <em>(mỗi cuối tuần)</em>, 
+                        every holiday <em>(mỗi kỳ nghỉ lễ)</em>
+                    </li>
+                    <li>
+                        <strong>Once/Twice a day/week/month/year:</strong> 
+                        <em>(Một lần/Hai lần một ngày/tuần/tháng/năm)</em>.
+                    </li>
+                    <li>
+                        <strong>[Số đếm, trừ 1 và 2] + times + a day/week/month/year:</strong> 
+                        three times a week <em>(ba lần một tuần)</em>, 
+                        four times a year <em>(bốn lần một năm)</em>...
+                    </li>
+                </ul>
+            </div> 
+
+            <h3>Cách dùng thì hiện tại đơn</h3>
+            <table>
+                <tr>
+                    <th>Thể</th><th>Công thức</th>
+                </tr>
+                <tr>
+                    <td>Khẳng định</td><td>S + V(s/es) + O</td>
+                </tr>
+                <tr>
+                    <td>Phủ định</td><td>S + do/does + not + V-inf + O</td>
+                </tr>
+                <tr>
+                    <td>Nghi vấn</td><td>Do/Does + S + V-inf + O?</td>
+                </tr>
+            </table>
+        </section>
+        <!--Hiện tại tiếp diễn  -->
+        <section id="present_continuous" class="tense">
+            <h2>Present Continuous (Hiện tại tiếp diễn)</h2>
+            <h3>Cách sử dụng</h3>
+            <p>Thì hiện tại tiếp diễn (Present Continuous Tense) dùng diễn tả những sự việc xảy ra ngay lúc chúng ta nói hay xung quanh thời điểm chúng ta nói, và hành động đó vẫn còn tiếp tục diễn ra (chưa chấm dứt)..</p>
+            <table>
+                <tr>
+                    <th>Cách dùng</th>
+                    <th>Ví dụ</th>
+                </tr>
+                <tr>
+                    <td>Diễn tả sự việc đang xảy ra trong thời điểm hiện tại.</td>
+                    <td>I am watching a movie right now.
+                        (<i>Tôi đang xem phim bây giờ.</i>)</td>
+                </tr>
+                <tr>
+                    <td>Diễn tả một hành động sẽ xảy ra trong tương lai gần, thường là đề cập về kế hoạch đã được lên lịch sẵn từ trước.</td>
+                    <td> My brother is flying to Singapore tomorrow.
+                        (<i>Anh tôi sẽ bay đến Singapore vào ngày mai.</i>)</td>
+                </tr>
+                <tr>
+                    <td>Diễn tả sự việc mang tính chất tạm thời. </td>
+                    <td>TShe often goes to work by car, but this week her car breaks down so she is going to work by train.
+                        (<i>Cô ấy thường đi làm bằng xe ô tô, nhưng tuần này xe ô tô của cô ấy bị hỏng nên cô ấy đi tàu tới chỗ làm.</i>)</td>
+                </tr>
+                <tr>
+                    <td>Dùng khi than phiền về một hành động, sự việc lặp đi lặp lại và thường đi kèm những trạng từ/cụm từ diễn tả tần suất cao (always, all the time, usually…)</td>
+                    <td>My mother is always telling me to clean my room!
+                        (<i>Mẹ tôi luôn nói tôi dọn dẹp phòng của tôi!</i>)</td>
+                </tr>
+                <tr>
+                    <td>Diễn tả sự khác biệt ngày trước và bây giờ (<i>mô tả sự đổi mới</i>).</td>
+                    <td>Almost all people are using vehicles instead of walking. 
+                        (<i>Hầu hết mọi người dùng phương tiện thay vì đi bộ.</i>)</td>
+                </tr>
+            </table>
+
+            <div id="frequency-adverbs">
+                <h3>Dấu hiệu nhận biết</h3>
+                <p>Để nhận biết thì hiện tại tiếp diễn, các mệnh đề (câu) thường chứa các từ/cụm từ như sau.</p>
+                <ul>
+                    <li>
+                        <strong>Các từ/cụm từ có nghĩa “hiện tại”:</strong> 
+                        <em>now (bây giờ), right now (ngay bây giờ), at the/this moment (tại thời điểm này)...</em>
+                    </li>
+                    <li>
+                        <strong>Các từ/cụm từ chỉ khoảng thời gian gần đây (thời điểm nói):</strong> 
+                        these days <em>(dạo này)</em>, currently <em>(hiện nay)</em>, 
+                        this week <em>(tuần này)</em>, 
+                        <span class="highlight">this month <em>(tháng này)</em></span>...
+                    </li>
+                    <li>
+                        <strong>Các mốc thời gian trong tương lai gần:</strong> 
+                        this weekend <em>(cuối tuần này)</em>, tonight <em>(tối nay)</em>, 
+                        at the end of this year <em>(vào cuối năm nay)</em>...
+                    </li>
+                    <li>
+                        <strong>Động từ gây sự chú ý:</strong> 
+                        Look!/watch <em>(Nhìn kìa)</em>, Listen! <em>(Nghe này)</em>, 
+                        Keep silent! <em>(Im lặng)</em>, 
+                        Watch out!/Look out! <em>(Coi chừng).</em>
+                    </li>
+                </ul>
+            </div>
+
+            <h3>Cách dùng</h3>
+            <table>
+                <tr>
+                    <th>Thể</th>
+                    <th>Công thức</th>
+                </tr>
+                <tr>
+                    <td>Khẳng định</td>
+                    <td>S + am/is/are + V-ing + O</td>
+                </tr>
+                <tr>
+                    <td>Phủ định</td>
+                    <td>S + am/is/are + not + V-ing + O</td>
+                </tr>
+                <tr>
+                    <td>Nghi vấn</td>
+                    <td>Am/Is/Are + S + V-ing + O?</td>
+                </tr>
+            </table>
+        </section>
+
+        <!--Hiện tại hoàn thành  -->
+        <section id="present_perfect" class="tense">
+            <h2>Present Perfect (Hiện tại hoàn thành)</h2>
+            <h3>Cách sử dụng</h3>
+            <p>Thì hiện tại hoàn thành (Present Perfect Tense) dùng diễn tả một sự việc, hành động đã bắt đầu từ trong quá khứ, kéo dài tới hiện tại và có thể tiếp tục tiếp diễn trong </p>
+            
+            <table>
+                <tr>
+                    <th>Cách dùng</th><th>ví dụ</th>
+                </tr>
+                <tr>
+                    <td>Diễn tả hành động đã được bắt đầu từ quá khứ nhưng vẫn kéo dài cho tới hiện tại và có thể vẫn tiếp diễn ở tương lai.</td>
+                    <td>We have worked at this company since 2010.
+                        (<i>Chúng tôi đã làm việc cho công ty này từ 2010.</i>)</td>
+                </tr>
+                <tr>
+                    <td>Diễn tả một sự việc vừa mới xảy ra và đã kết thúc, thường đi kèm với trạng từ “just” (vừa mới).</td>
+                    <td>Will Smith has just been banned from attending the Oscars for 10 years.
+                        (<i>Will Smith vừa bị cấm tham dự 
+                        lễ trao giải Oscar trong 10 năm.</i>)</td>
+                </tr>
+                <tr>
+                    <td>Diễn tả kinh nghiệm, trải nghiệm cho đến hiện tại, thường đi kèm với các từ diễn tả số lần.</td>
+                    <td>Leonardo DiCaprio has only won the Oscar once. 
+                        (<i>Leonardo DiCaprio mới chỉ đoạt giải Oscar một lần.</i>)</td>
+                </tr>
+                <tr>
+                    <td>Diễn tả một hành động trong quá khứ nhưng ảnh hưởng đến hiện tại</td>
+                    <td>She can’t get in her car. She has lost her key.
+                        (<i>Cô ấy không thể vào được xe. Cô ấy đã làm mất chìa khóa.</i>)</td>
+                </tr>
+            <table>
+
+            <div id="frequency-adverbs">
+                <h3>Dấu hiệu nhận biết </h3>
+                <p>Các mệnh đề (câu) sử dụng thì hiện tại hoàn thành thường chứa các từ/cụm từ như sau.</p>
+                
+                <ul>
+                    <li>
+                        <strong>Just/Recently/Lately.</strong>
+                    </li>
+                    <li>
+                        <strong>Already/ Since/ Before/ Never/ Ever/ Yet.</strong>
+                    </li>
+                    <li>
+                        <strong>Cụm từ So far = Until now = Up to now = Up to the present</strong> 
+                        <em>(cho đến bây giờ).</em>
+                    </li>
+                    <li>
+                        <strong>For + khoảng thời gian:</strong> 
+                        <em>for 5 years, for a long time, for a week...</em>
+                    </li>
+                    <li>
+                        <strong>Since + mốc thời gian cụ thể:</strong>
+                        <em>since 2023, since November...</em>
+                    </li>
+                    <li>
+                        <strong>The first, second, third, fourth time...</strong> 
+                        <em>(lần đầu tiên, lần thứ hai, lần thứ ba, lần thứ tư...)</em>
+                    </li>
+                </ul>
+            </div>
+
+            <h3>cách dùng</h3>
+            <table>
+                <tr>
+                    <th>Thể</th><th>Công thức</th>
+                </tr>
+                <tr>
+                    <td>Khẳng định</td><td>S + have/has + V3/ed + O</td>
+                </tr>
+                <tr>
+                    <td>Phủ định</td><td>S + have/has + not + V3/ed + O</td>
+                </tr>
+                <tr>
+                    <td>Nghi vấn</td><td>Have/Has + S + V3/ed + O?</td>
+                </tr>
+            </table>
+        </section>
+
+        <!-- hiện tại hoàn thành tiếp diễ -->
+        <section id="present_perfect_continuous" class="tense">
+            <h2>Present Perfect Continuous (hiện tại hoàn thành tiếp diễn) </h2>
+            <h3>Cách sử dụng</h3>
+            <p>Thì hiện tại hoàn thành tiếp diễn (Present Perfect Continuous Tense) dùng để chỉ hành động đã xảy ra trong quá khứ nhưng vẫn tiếp tục ở hiện tại và có khả năng tiếp diễn ở tương lai.  </p>
+            
+            <table>
+                <tr>
+                    <th>Cách dùng</th>
+                    <th>Ví dụ</th>
+                </tr>
+                <tr>
+                    <td>1. Miêu tả sự việc xảy ra trong quá khứ, kéo dài tới hiện tại và có thể tiếp diễn ở tương lai.</td>
+                    <td>She has been living in America for 4 years.<br>
+                        (<i>Cô ấy đã sang Mỹ sinh sống được 4 năm.</i>)</td>
+                </tr>
+                <tr>
+                    <td>2. Miêu tả hành động đang xảy ra và vừa mới kết thúc nhưng người nói vẫn có thể nhìn thấy tác động của nó.</td>
+                    <td>She has been crying for an hour so her eyes are swollen now.<br>
+                        (<i>Cô ấy khóc cả tiếng rồi nên giờ mắt sưng táy lên.</i>)</td>
+                </tr>
+            </table>
+
+            <div id="frequency-adverbs">
+                <h3>Dấu hiệu nhận biết</h3>
+                <p>Các mệnh đề (câu) sử dụng thì hiện tại hoàn thành tiếp diễn thường chứa các từ/cụm từ như sau.</p>
+                
+                <ul>
+                    <li>
+                        <strong>Since + N</strong>
+                         <em>(mốc/ điểm thời gian không rõ ràng)</em>
+                    </li>
+                    <li>
+                        <strong>For + N</strong> 
+                        <em>(quãng thời gian)</em>
+                    </li>
+                    <li>
+                        <strong>All + khoảng thời gian</strong>
+                    </li>
+                    <li>
+                        <strong>For the whole + N</strong> 
+                        <em>(chỉ thời gian)</em>
+                    </li>
+                </ul>
+            </div>
+
+            <h3>cách dùng</h3>
+            <table>
+                <tr>
+                    <th>Thể</th>
+                    <th>Công thức</th>
+                </tr>
+                <tr>
+                    <td>Khẳng định</td>
+                    <td>S + have/has + been + V-ing + O</td>
+
+                </tr>
+                <tr>
+                    <td>Phủ định</td>
+                    <td>S + have/has + not + been + V-ing + O</td>
+                </tr>
+                <tr>
+                    <td>Nghi vấn</td>
+                    <td>Have/Has + S + been + V-ing + O?</td>
+                </tr>
+            </table>
+        </section>
+
+        <!-- Quá khứ đơn -->
+        <section id="past_simple" class="tense">
+            <h2>Past Simple (Quá khứ đơn)</h2>
+            <h3>Cách sử dụng</h3>
+            <p>Diễn tả hành động đã xảy ra và kết thúc trong quá khứ.</p>
+            
+            <table>
+                <tr>
+                    <th>Cách dùng</th>
+                    <th>Ví dụ</th>
+                </tr>
+                <tr>
+                    <td>1. Miêu tả một hoặc chuỗi hành động đã xảy ra và kết thúc trong quá khứ.</td>
+                    <td>My brother went to school at 7.30 AM this morning.<br>
+                        (<i>Anh trai tôi đi học lúc 7 giờ 30 phút sáng nay.</i>)</td>
+                </tr>
+                <tr>
+                    <td>2. Miêu tả thói quen hoặc hành động được lặp đi lặp lại trong quá khứ.</td>
+                    <td>When I was in primary school, I often went to school by bike.<br>
+                        (<i>Khi tôi học tiểu học, tôi thường tới trường bằng xe đạp.</i>)</td>
+                </tr>
+            </table>
+            
+            <div id="frequency-adverbs">
+                <h3>Dấu hiệu nhận biết</h3>
+                <li>Về dấu hiệu nhận biết, thì quá khứ đơn dùng trong câu có từ/cụm từ chỉ thời gian cụ thể trong quá khứ: yesterday (hôm qua), last night (đêm hôm trước), last year (năm trước), in 1995 (vào năm 1995)...</li>
+                <li>Lưu ý rằng không có một quy tắc cụ thể để nhận biết thì Quá khứ đơn. Thông thường, dấu hiệu nhận biết được dựa trên từ ngữ và ngữ cảnh của câu. Vì vậy bạn cần chú ý xem xét yếu tố này để xác định thì Quá khứ đơn một cách chính xác.</li>
+            </div>
+            
+            <table>
+                <tr>
+                    <th>Thể</th>
+                    <th>Công thức</th>
+                </tr>
+                <tr>
+                    <td>Khẳng định</td>
+                    <td>S + V2/ed + O</td>
+                </tr>
+                <tr>
+                    <td>Phủ định</td>
+                    <td>S + did not + V-inf + O</td>
+                </tr>
+                <tr>
+                    <td>Nghi vấn</td>
+                    <td>Did + S + V-inf + O?</td>
+                </tr>
+            </table>
+        </section>
+
+        <!-- Qúa khứ tiếp diễn -->
+        <section id="past_continuous" class="tense">
+            <h2>Past Continuous(Qúa khứ tiếp diễn)</h2>
+            <h3>Cách sử dụng</h3>
+            <p>Thì quá khứ tiếp diễn (Past Continuous Tense) dùng để diễn tả một sự việc, hành động đang diễn ra xung quanh một thời điểm trong quá khứ.</p>
+            
+            <table>
+                <tr>
+                    <th>Cách dùng</th>
+                    <th>Ví dụ</th>
+                </tr>
+                <tr>
+                    <td>1. Miêu tả một sự việc đang diễn ra tại một thời điểm cụ thể trong quá khứ, thường có mốc thời gian cụ thể.</td>
+                    <td>They were studying IELTS at 7 PM last night.<br>
+                        (<i>Họ đã học IELTS vào 7 giờ tối qua.</i>)</td>
+                </tr>
+                <tr>
+                    <td>2. Miêu tả những hành động xảy ra song song với nhau trong quá khứ.</td>
+                    <td>An was studying to music while his mother was cooking in the kitchen.<br>
+                        (<i>An đang học nhạc khi mẹ anh ấy ny n\u1eau ăn trong bếp.</i>)</td>
+                </tr>
+                <tr>
+                    <td>3. Miêu tả một sự việc đang xảy ra thì có một sự việc khác cắt ngang trong quá khứ.</td>
+                    <td>When she called, I was watching Hana’s Lexis’ video.<br>
+                        (<i>Khi cô ấy gọi, tôi đang xem video của Hana’s Lexis.</i>)</td>
+                </tr>
+                <tr>
+                    <td>4. Miêu tả hành động xảy ra thường xuyên kế từ (theo thói quen) trong quá khứ, thường được thể hiện thông qua các từ như: always, constantly.</td>
+                    <td>When I stayed with her, I was always cleaning the house after all her parties.<br>
+                        (<i>Hồi tôi ở cùng với cô ấy, lúc nào tôi cũng phải dọn dẹp nhà sau những buổ tiệc tùng của cô ấy chưa.</i>)</td>
+                </tr>
+                <tr>
+                    <td>5. Dùng để miêu tả hành động đang xảy ra trong một thời gian đã qua (nhấn mạnh tính liên tục của hành động).</td>
+                    <td>Yesterday, I was baking in the kitchen the whole morning.<br>
+                        (<i>Suốt buổi sáng ngày hôm qua, tôi đã nướng bánh trong bếp.</i>)</td>
+                </tr>
+            </table>
+            
+            <div id="frequency-adverbs"> 
+                <h3>dấu hiệu nhận biết</h3>
+                <p>Để nhận biết thì quá khứ tiếp diễn, hãy chú ý các mệnh đề (câu) sử dụng thì này thường chứa các từ/cụm từ như sau.</p>
+                <ul>
+                    <li>
+                        <strong>Câu có các từ/cụm từ hoặc mệnh đề chỉ thời gian cụ thể trong quá khứ:</strong> 
+                        at this time yesterday <em>(vào thời điểm này ngày hôm trước)</em>, at 8 p.m last night <em>(vào 8 giờ tối hôm qua)</em>,...
+                    </li>
+                    <li>
+                        <strong>Câu có mệnh đề chứa “when”</strong> <em>(khi)</em> hoặc <strong>“while”</strong> <em>(trong khi).</em>
+                    </li>
+                </ul>
+            </div>
+            <h3>cách dùng</h3>
+            <table>
+                <tr>
+                    <th>Thể</th>
+                    <th>Công thức</th>
+                </tr>
+                <tr>
+                    <td>Khẳng định</td>
+                    <td>S + was/were + V-ing + O</td>
+                </tr>
+                <tr>
+                    <td>Phủ định</td>
+                    <td>S + was/were + not + V-ing + O</td>
+                </tr>
+                <tr>
+                    <td>Nghi vấn</td>
+                    <td>Was/Were + S + V-ing + O?</td>
+                </tr>
+            </table>
+
+        </section>
+
+
+        <!--quá khứ hoàn thành)  -->
+        <section id="past_perfect" class="tense">
+            <h2>Past Perfect (quá khứ hoàn thành)</h2>
+            <h3>cách sử dụng</h3>
+            <p>Thì quá khứ hoàn thành (Past Perfect Tense) dùng diễn tả một hành động xảy ra trước một hành động khác trong quá khứ. </p>
+            
+            <table>
+                <tr>
+                    <th>Cách dùng</th>
+                    <th>Ví dụ</th>
+                </tr>
+                <tr>
+                    <td>1. Miêu tả một sự việc đã xảy ra trước một thời điểm cụ thể trong quá khứ hoặc trước một sự việc khác trong quá khứ.</td>
+                    <td>By the time we got to the stadium, the performance had already started.<br>
+                        (<i>Khi chúng tôi đến sân vận động thì buổi biểu diễn đã bắt đầu rồi.</i>)</td>
+                </tr>
+                <tr>
+                    <td>2. Miêu tả các tình huống, dự định ban đầu dã thay đổi.</td>
+                    <td>I had planned to be a police officer since I was five years old but then, I decided to become an entrepreneur in college and opened my own startup.<br>
+                        (<i>Tôi đã tñng muốn làm công an kể từ khi tôi 5 tuổi nhưng khi vào đại học, tôi đã quyết định trở thành doanh nhân và mở công ty khởi nghiệp riêng.</i>)</td>
+                </tr>
+                <tr>
+                    <td>3. Miêu tả hành động này là điều kiện cho hành động kia xảy ra.</td>
+                    <td>She had quit her office job and could finally start a venture with her like-minded friends.<br>
+                        (<i>Cô ấy đã nghỉ công việc văn phòng và cuối cùng cũng có thể bắt đầu khởi nghiệp cùng với các người bạn đồng chí hướng.</i>)</td>
+                </tr>
+            </table>
+            
+            <div id="frequency-adverbs">
+                <h3>dấu hiệu nhận biết</h3>
+                <p>Các mệnh đề (câu) sử dụng thì quá khứ hoàn thành thường chứa các từ/cụm từ như sau.</p>
+                <ul>
+                    <li>
+                        <strong>When</strong> <em>(khi)</em>.
+                    </li>
+                    <li>
+                        <strong>Before</strong> <em>(Trước "before" sử dụng thì quá khứ hoàn thành và sau "before" sử dụng thì quá khứ đơn).</em>
+                    </li>
+                    <li>
+                        <strong>After</strong> <em>(Trước "after" sử dụng thì quá khứ đơn và sau "after" sử dụng thì quá khứ hoàn thành).</em>
+                    </li>
+                    <li>
+                        <strong>By the time</strong> <em>(trước thời gian nào đó).</em>
+                    </li>
+                    <li>
+                        <strong>Until</strong> <em>(cho tới thời gian nào đó).</em>
+                    </li>
+                </ul>
+            </div>
+            <h3>cách dùng</h3>
+            <table>
+                <tr>
+                    <th>Thể</th>
+                    <th>Công thức</th>
+
+                </tr>
+                <tr>
+                    <td>Khẳng định</td>
+                    <td>S + had + V3/ed + O</td>
+                </tr>
+                <tr>
+                    <td>Phủ định</td>
+                    <td>S + had + not + V3/ed + O</td>
+                </tr>
+                <tr>
+                    <td>Nghi vấn</td>
+                    <td>Had + S + V3/ed + O?</td>
+                </tr>
+            </table>
+        </section>
+
+        <!-- quá khứ hoàn thành tiếp diễn -->
+        <section id="past_perfect_continuous" class="tense">
+            <h2>Past Perfect Continuous (quá khứ hoàn thành tiếp diễn)</h2>
+            <h3>cách sử dụng</h3>
+            <p>Thì quá khứ hoàn thành tiếp diễn (Past Perfect Continuous Tense) diễn tả một sự việc, hành động đã đang xảy ra trong quá khứ và kết thúc trước một hành động cũng xảy ra ở trong quá khứ.  </p>
+            <table>
+                <tr>
+                    <th>Cách dùng</th>
+                    <th>Ví dụ</th>
+                </tr>
+                <tr>
+                    <td>1. Miêu tả một hành động đang xảy ra trước một hành động trong quá khứ hoặc trước mốc thời gian cụ thể trong quá khứ (nhấn mạnh tính tiếp diễn).</td>
+                    <td>I had been intensely working out for 2 hours straight when he came home and saw me chugging down the huge bottle of water.<br>
+                        (<i>Tôi đã tập thể dục rất căng trong vòng 2 tiếng liên khi anh ấy về nhà và thấy tôi uống liền 1 chai nước to.</i>)</td>
+                </tr>
+                <tr>
+                    <td>2. Miêu tả hành động là nguyên nhân của một điều gì đó trong quá khứ.</td>
+                    <td>Since I had been complaining non-stop about my family, he snapped and told me to be grateful about what they had sacrificed for me.<br>
+                        (<i>Vì tôi đã liên tục rên rả nạn về gia đình mình, anh ấy đã phát cáu và bảo tôi phải biết ơn về những gì họ đã hi sinh cho tôi.</i>)</td>
+                </tr>
+            </table>
+            
+            <div id="frequency-adverbs">
+                <h3>dấu hiệu nhận biết</h3>
+                <p>Các mệnh đề (câu) sử dụng thì quá khứ hoàn thành tiếp diễn thường chứa các từ/cụm từ như sau.</p>
+                <ul>
+                    <li>
+                        <strong>Until</strong> <em>(cho đến lúc đó)</em>.
+                    </li>
+                    <li>
+                        <strong>When/By the time</strong> <em>(vào lúc)</em>.
+                    </li>
+                    <li>
+                        <strong>By + mốc thời gian cụ thể</strong> <em>(từ trước cho đến lúc...)</em>.
+                    </li>
+                    <li>
+                        <strong>Before</strong> <em>(trước khi)</em>.
+                    </li>
+                </ul>
+            </div>
+            <h3>cách dùng</h3>
+            <table>
+                <tr>
+                    <th>Thể</th>
+                    <th>Công thức</th>
+                </tr>
+                <tr>
+                    <td>Khẳng định</td>
+                    <td>S + had + been + V-ing + O</td>
+                </tr>
+                <tr>
+                    <td>Phủ định</td>
+                    <td>S + had + not + been + V-ing + O</td>
+                </tr>
+                <tr>
+                    <td>Nghi vấn</td>
+                    <td>Had + S + been + V-ing + O?</td>
+                </tr>
+        </section>
+
+        <!-- tương lai đơn -->
+        <section id="future_simple" class="tense">
+            <h2>Future Simple (Tương lai đơn)</h2>
+            <h3>cách sử dụng</h3>
+            <p>Thì tương lai đơn (Future Simple Tense) diễn tả một hành động, sự việc hoặc tình trạng sẽ (có thể) xuất hiện trong tương lai. Có nghĩa là hành động, sự việc hoặc tình trạng đó chưa xuất hiện ở hiện tại.</p>
+            
+            <table>
+                <tr>
+                    <th>Cách dùng</th>
+                    <th>Ví dụ</th>
+                </tr>
+                <tr>
+                    <td>1. Miêu tả một sự việc sẽ diễn ra trong tương lai.</td>
+                    <td>I think it’ll rain soon.<br>
+                        (<i>Tôi nghĩ trời sẽ mưa sớm.</i>)</td>
+                </tr>
+                <tr>
+                    <td>2. Miêu tả một dự định hoặc quyết định được đưa ra ngay tại thời điểm nói.</td>
+                    <td>Let’s order some food! I’ll order fish.<br>
+                        (<i>Hãy đặt món đi! Tôi sẽ gọi món cá.</i>)</td>
+                </tr>
+                <tr>
+                    <td>3. Miêu tả một lời hứa.</td>
+                    <td>I’ll help you move to your new place.<br>
+                        (<i>Tôi sẽ giúp bạn chuyển đến nơi ở mới.</i>)</td>
+                </tr>
+                <tr>
+                    <td>4. Miêu tả một lời cảnh báo hoặc lời đe doạ.</td>
+                    <td>Be careful or the box will fall on you!<br>
+                        (<i>Hãy cẩn thận nếu không chiếc hộp sẽ rơi trúng vào bạn!</i>)</td>
+                </tr>
+                <tr>
+                    <td>5. Miêu tả lời yêu cầu, đề nghị, lời mời hoặc lời gợi ý.</td>
+                    <td>Will you help me with this report?<br>
+                        (<i>Bạn sẽ giúp tôi với báo cáo này?</i>)</td>
+                </tr>
+                <tr>
+                    <td>6. Miêu tả việc xin lời khuyên.</td>
+                    <td>Who shall I do in case her fever spikes again?<br>
+                        (<i>Tôi nên làm gì trong trường hợp cô ấy sốt cao nữa?</i>)</td>
+                </tr>
+            </table>
+            
+            <div id="frequency-adverbs">
+                <h3>dấu hiệu nhận biết</h3>
+                <p>Các mệnh đề (câu) sử dụng thì tương lai đơn thường chứa các từ/cụm từ như sau.</p>
+                <ul>
+                    <li>
+                        <strong>Câu có các từ/cụm từ hoặc các mệnh đề chỉ các thời điểm trong tương lai:</strong> 
+                        tomorrow <em>(ngày mai)</em>, next year <em>(năm sau)</em>, this weekend <em>(cuối tuần này)</em>,...
+                    </li>
+                    <li>
+                        <strong>Câu có chứa từ chỉ quan điểm, sự suy đoán về việc có thể sẽ xảy ra trong tương lai:</strong> 
+                        think/suppose/believe/guess, promise, probably, perhaps, hope/expect.
+                    </li>
+                </ul>
+            </div>
+            <h3>cách dùng</h3>
+            <table>
+                <tr>
+                    <th>Thể</th>
+                    <th>Công thức</th>
+                </tr>
+                <tr>
+                    <td>Khẳng định</td>
+                    <td>S + will + V-inf + O</td>
+                </tr>
+                <tr>
+                    <td>Phủ định</td>
+                    <td>S + will + not + V-inf + O</td>
+                </tr>
+                <tr>
+                    <td>Nghi vấn</td>
+                    <td>Will + S + V-inf + O?</td>
+                </tr>
+        </section>
+        
+        <!-- tương lai tiếp  diễn -->
+        <section id="future_continuous" class="tense">
+            <h2>Future Continuous (tương lai tiếp  diễn)</h2>
+            <h3>cách sử dụng</h3>
+            <p>Thì tương lai tiếp diễn (Future Continuous Tense) dùng diễn tả một hành động, sự việc sẽ đang diễn ra tại trong thời điểm cụ thể ở tương lai.</p>
+            
+            <table>
+                <tr>
+                    <th>Cách dùng</th>
+                    <th>Ví dụ</th>
+                </tr>
+                <tr>
+                    <td>1. Miêu tả hành động sẽ đang diễn ra và kéo dài liên tục tại một thời điểm xác định trong tương lai.</td>
+                    <td>At 9 AM tomorrow, we’ll be studying.<br>
+                        (<i>9 giờ sáng ngày mai, chúng ta sẽ đang học.</i>)</td>
+                </tr>
+                <tr>
+                    <td>2. Miêu tả một sự việc, hành động đang xảy ra trong tương lai thì có một hành động, sự việc khác xen vào.</td>
+                    <td>When my friends come tomorrow evening, I will be watching TV.<br>
+                        (<i>Khi các bạn của tôi tới vào tối ngày mai, tôi sẽ đang xem TV.</i>)</td>
+                </tr>
+                <tr>
+                    <td>3. Miêu tả hành động sắp xảy ra là một phần trong kế hoạch hoặc lịch trình.</td>
+                    <td>The wedding will be starting in the next 10 minutes.<br>
+                        (<i>Bữa tiệc sẽ bắt đầu trong vòng 10 phút nữa.</i>)</td>
+                </tr>
+                <tr>
+                    <td>4. Dùng để yêu cầu/hỏi một cách lịch sự về một thông tin nào đó ở tương lai.</td>
+                    <td>Will you be going to the party tonight?<br>
+                        (<i>Bạn sẽ đến bữa tiệc tối nay chứ?</i>)</td>
+                </tr>
+                <tr>
+                    <td>5. Dùng với "still" để diễn tả sự mong đợi giữa sự tiếp diễn xảy ra trong tương lai.</td>
+                    <td>In 2 hours, she will still be watching this movie.<br>
+                        (<i>Trong 2 giờ tới, cô ấy vẫn sẽ đang xem bộ phim này.</i>)</td>
+                </tr>
+                <tr>
+                    <td>6. Dùng để so sánh giữa hiện tại và tương lai.</td>
+                    <td>My car is broken so I will be going to work by bus this week.<br>
+                        (<i>Xe đố của tôi hỏng nên tuần này tôi sẽ đi làm bằng xe buýs.</i>)</td>
+                </tr>
+            </table>
+            
+            <div id="frequency-adverbs">
+                <h3>dấu hiệu nhận biết</h3>
+                <p>Mệnh đề (câu) có chứa các từ/cụm từ chỉ các thời điểm cụ thể trong tương lai.</p>
+                <ul>
+                    <li>
+                        <strong>At this/that + time/moment + khoảng thời gian trong tương lai.</strong>
+                    </li>
+                    <li>
+                        <strong>At + thời điểm xác định trong tương lai.</strong>
+                    </li>
+                    <li>
+                        <strong>...when + mệnh đề chia thì hiện tại đơn.</strong>
+                    </li>
+                    <li>
+                        <strong>In the future, next year, next week, next time, soon.</strong>
+                    </li>
+                </ul>
+            </div>
+            <h3>cách dùng</h3>
+        </section>
+
+        <!--  tương lai hoàn thành-->
+        <section id="future_perfect" class="tense">
+            <h2>Future Perfect (tương lai hoàn thành)</h2>
+            <h3>cách sử dụng</h3>
+            <p>Thì tương lai hoàn thành (Future Perfect Tense) diễn tả một hành động, sự việc hoàn tất trước một mốc thời gian hay một hành động, sự việc khác trong tương lai.</p>
+            
+            <table>
+                <tr>
+                    <th>Cách dùng</th>
+                    <th>Ví dụ</th>
+                </tr>
+                <tr>
+                    <td>1. Miêu tả một sự việc, hành động hoàn thành trước một sự việc, hành động ở tương lai.</td>
+                    <td>She will have had dinner when you come.<br>
+                        (<i>Cô ấy sẽ ăn tối xong khi bạn đến.</i>)</td>
+                </tr>
+                <tr>
+                    <td>2. Miêu tả hành động sẽ được hoàn tất trước mốc thời điểm trong tương lai.</td>
+                    <td>The construction of the new bridge will have been completed by the end of the year.<br>
+                        (<i>Việc xây dựng cầy cầu mới sẽ đã được hoàn thành trước cuối năm.</i>)</td>
+                </tr>
+                <tr>
+                    <td>3. Miêu tả một sự việc lặp đi lặp lại nhiều lần cho tới mốc thời điểm cụ thể trong tương lai.</td>
+                    <td>My friend will have visited Paris two times by 2025.<br>
+                        (<i>Bạn tôi sẽ đến thăm Paris hai lần vào năm 2025.</i>)</td>
+                </tr>
+            </table>
+            
+            <div id="frequency-adverbs">
+                <h3>dấu hiệu nhận biết</h3>
+                <p>Các mệnh đề (câu) sử dụng thì tương lai hoàn thành thường chứa các từ/cụm từ như sau.</p>
+                <ul>
+                    <li>
+                        <strong>By + thời gian tương lai</strong> <em>(by 8 a.m, by next week, by next year,...)</em>.
+                    </li>
+                    <li>
+                        <strong>By the time + mệnh đề chia ở thì hiện tại đơn</strong> <em>(by the time I have lunch,...)</em>.
+                    </li>
+                    <li>
+                        <strong>Before + sự việc/ thời điểm trong tương lai</strong> <em>(before 2023,...)</em>.
+                    </li>
+                </ul>
+            </div>
+            <h3>cách dùng</h3>
+            <table>
+                <tr>
+                    <th>Thể</th>
+                    <th>Công thức</th>
+                </tr>
+                <tr>
+                    <td>Khẳng định</td>
+                    <td>S + will + have + V3/ed + O</td>
+                </tr>
+                <tr>
+                    <td>Phủ định</td>
+                    <td>S + will + not + have + V3/ed + O</td>
+                </tr>
+                <tr>
+                    <td>Nghi vấn</td>
+                    <td>Will + S + have + V3/ed + O?</td>
+                </tr>
+            </table>
+        </section>
+
+        <!-- Tương lai hoàn thành tiếp diễn -->
+        <section id="future_perfect_continuous" class="tense">
+            <h2>Future Perfect Continuous (Tương lai hoàn thành tiếp diễn)</h2>
+            <h3>cách sử dụng</h3>
+            <p>Thì tương lai hoàn thành tiếp diễn (Future Perfect Continuous Tense) diễn tả một sự việc, một hành động sẽ xảy ra và xảy ra liên tục trước một thời điểm nào đó ở tương lai.</p>
+            
+            <table>
+                <tr>
+                    <th>Cách dùng</th>
+                    <th>Ví dụ</th>
+                </tr>
+                <tr>
+                    <td>1. Thì tương lai hoàn thành tiếp diễn nhấn mạnh <b>tính liên tục</b> của một sự việc, hành động so với sự việc, hành động khác trong tương lai.</td>
+                    <td>I will have been playing video games for 7 years when I am 18 years old.<br>
+                        (<i>Tôi sẽ chơi game được 7 năm khi tôi tròn 18 tuổi.</i>)</td>
+                </tr>
+                <tr>
+                    <td>2. Diễn tả một sự việc, hành động xảy ra và kéo dài liên tục đến mốc thời điểm cụ thể ở tương lai.</td>
+                    <td>She will have been traveling abroad for 4 months by the end of next week.<br>
+                        (<i>Cô ấy sẽ đi nước ngoài được 4 tháng tính tới hết năm nay.</i>)</td>
+                </tr>
+            </table>
+            
+            <div id="frequency-adverbs">
+                <h3>dấu hiệu nhận biết</h3>
+                <p>Các mệnh đề (câu) sử dụng thì tương lai hoàn thành tiếp diễn thường chứa các từ/cụm từ như sau.</p>
+                <ul>
+                    <li>
+                        <strong>By then</strong>.
+                    </li>
+                    <li>
+                        <strong>By + mốc thời gian cụ thể</strong> <em>(Ví dụ: by this June, by Friday,...)</em>.
+                    </li>
+                    <li>
+                        <strong>By the time/when + 1 mệnh đề ở thì hiện tại đơn</strong> <em>(Ví dụ: by the time he comes back,...)</em>.
+                    </li>
+                    <li>
+                        <strong>For + khoảng thời gian</strong>.
+                    </li>
+                </ul>
+            </div>
+            <h3>cách dùng</h3>
+            <table>
+                <tr>
+                    <th>Thể</th>
+                    <th>Công thức</th>
+                </tr>
+                <tr>
+                    <td>Khẳng định</td>
+                    <td>S + will + have + been + V-ing + O</td>
+                </tr>
+                <tr>
+                    <td>Phủ định</td>
+                    <td>S + will + not + have + been + V-ing + O</td>
+                </tr>
+                <tr>
+                <td>Nghi vấn</td>
+                <td>Will + S + have + been + V-ing + O?</td>
+                </tr>
+            </table>
+        </section>
+    </main>
+    {% block backToTop %}
+    <button id="backToTop" onclick="scrollToTop()">↑</button>   
+        <script>
+            window.onscroll = function () {
+                let button = document.getElementById("backToTop");
+                if (document.body.scrollTop > 200 || document.documentElement.scrollTop > 200) {
+                    button.style.display = "block";
+                } else {
+                    button.style.display = "none";
+                }
+            };
+    
+            function scrollToTop() {
+                window.scrollTo({
+                    top: 0,
+                    behavior: "smooth"
+                });
+            }
+        </script>
+    {% endblock backToTop %}
+{% endblock content %}
