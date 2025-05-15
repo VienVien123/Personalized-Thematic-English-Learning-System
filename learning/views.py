@@ -27,6 +27,8 @@ from langchain.embeddings import HuggingFaceEmbeddings
 import environ
 from django.views.decorators.csrf import csrf_exempt
 import re
+from langdetect import detect 
+from googletrans import Translator  
 from .serializers import (
     UserSerializer, RegisterSerializer, LoginSerializer, LogoutSerializer, ChangePasswordSerializer,
     TopicListenSerializer, SectionSerializer, SubtopicSerializer, AudioExerciseSerializer,
@@ -436,7 +438,7 @@ def grammar_page(request):
 # </Render templates HTML files>
 
 
-# Cấu hình Gemini
+# # Cấu hình Gemini
 genai.configure(api_key="AIzaSyBg2npP92SnJRQwMSQAII_bPYeFyGh4ZCw")
 model = genai.GenerativeModel("gemini-1.5-flash")
 # Load model như trước
@@ -444,23 +446,8 @@ embedding_model = HuggingFaceEmbeddings(model_name="sentence-transformers/all-Mi
 
 # Load lại Chroma
 vector_db = Chroma(persist_directory="./chroma_english_learning", embedding_function=embedding_model)
-# @csrf_exempt
-# def gemini_chat_view(request):
-#     if request.method == 'POST':
-#         try:
-#             data = json.loads(request.body)
-#             message = data.get('message')
-#             topic = data.get('topic', 'General')
 
-#             system_prompt = f"You are an English learning assistant. Respond in a friendly, helpful way about: {topic}."
-#             full_prompt = f"{system_prompt}\nUser: {message}\nAssistant:"
-
-#             response = model.generate_content(full_prompt)
-#             return JsonResponse({'response': response.text.strip()})
-#         except Exception as e:
-#             return JsonResponse({'error': str(e)}, status=500)
-#     return JsonResponse({'error': 'Invalid request'}, status=400)
-
+translator = Translator()
 
 @csrf_exempt
 def gemini_chat_view(request):
@@ -470,30 +457,55 @@ def gemini_chat_view(request):
             message = data.get('message')
             topic = data.get('topic', 'General')
 
-            # 🔍 RAG: truy xuất ngữ cảnh từ Chroma
+            # ✅ Phát hiện ngôn ngữ
+            lang = detect(message)
+            print(f"[Detect Lang] Message language: {lang}")
+
+            # 🔍 RAG từ vectorDB
             retrieved_docs = vector_db.similarity_search(message, k=4)
             context = "\n".join([doc.page_content for doc in retrieved_docs])
-            print("Retrieved Context:", context)
-            # 🔧 Prompt
-            prompt = f"""
-You are an English learning assistant.
-Use the context below to help the user with the topic: {topic}.
 
-Context:
+            # ✨ Prompt chính
+            prompt = f"""
+You are English Learning – a friendly AI assistant on the website englishlearning.com, created by Viên Viên and Hữu Phúc.
+
+You help users learn English in a helpful, friendly, and respectful way.
+
+🔒 VERY IMPORTANT RULES:
+
+1. If the user writes in **Vietnamese**, you must reply in **correct Vietnamese** – with perfect spelling, punctuation, and capitalization.
+   - Do NOT use random uppercase letters.
+   - Do NOT insert emojis unless appropriate and natural.
+   - Do NOT invent placeholders like “[thời gian hiện tại]” – if you cannot answer, say so politely.
+   - Do NOT make fake responses about real-world facts you cannot access.
+
+2. If the user asks about time or weather, say:
+   > "Mình xin lỗi, hiện tại mình chưa thể truy cập thời gian thực. Tuy nhiên, mình có thể giúp bạn học tiếng Anh nếu bạn muốn nhé!"
+
+3. You must always sound:
+   - Clear and easy to understand
+   - Friendly, but **never silly or random**
+   - Focused on learning English
+
+---
+
+📚 Topic: {topic}
+📖 Context (retrieved):  
 {context}
 
-User: {message}
-Assistant:
-"""
+💬 User message:
+{message}
 
-            # 💬 Gửi vào Gemini
+🎓 Your reply (strictly follow the above rules):
+
+"""
             response = model.generate_content(prompt)
-            print("Gemini Response:", response.text.strip())
-            cleaned = re.sub(r"\*+", "", response.text.strip())
+            raw_output = response.text.strip()
+            print("Gemini Response:", raw_output)
+
+            
+            cleaned = re.sub(r"\*+", "", raw_output)
             return JsonResponse({'response': cleaned})
         except Exception as e:
             return JsonResponse({'error': str(e)}, status=500)
     return JsonResponse({'error': 'Invalid request'}, status=400)
-
-def profile_view(request):
-    return HttpResponse("You are logged in!")
