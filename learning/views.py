@@ -8,7 +8,7 @@ from django.contrib.auth import login, authenticate, logout
 from django.contrib import messages
 from django.contrib.auth.decorators import login_required
 from django.utils.timezone import now
-
+from django.http import HttpResponse
 from rest_framework import permissions, status, generics
 from rest_framework.viewsets import ModelViewSet
 from rest_framework.response import Response
@@ -22,6 +22,10 @@ from rest_framework_simplejwt.authentication import JWTAuthentication
 from rest_framework_simplejwt.exceptions import InvalidToken, TokenError
 import google.generativeai as genai
 from dotenv import load_dotenv
+from langchain_community.vectorstores import Chroma
+from langchain.embeddings import HuggingFaceEmbeddings
+
+
 import environ
 from django.views.decorators.csrf import csrf_exempt
 
@@ -148,3 +152,49 @@ def account_page(request):
 
 def grammar_page(request):
     return render(request, 'grammar.html')
+
+
+# Cấu hình Gemini
+genai.configure(api_key="AIzaSyBg2npP92SnJRQwMSQAII_bPYeFyGh4ZCw")
+model = genai.GenerativeModel("gemini-1.5-flash")
+# Load model như trước
+embedding_model = HuggingFaceEmbeddings(model_name="sentence-transformers/all-MiniLM-L6-v2")
+
+# Load lại Chroma
+vector_db = Chroma(persist_directory="./chroma_english_learning", embedding_function=embedding_model)
+
+@csrf_exempt
+def gemini_chat_view(request):
+    if request.method == 'POST':
+        try:
+            data = json.loads(request.body)
+            message = data.get('message')
+            topic = data.get('topic', 'General')
+
+            # 🔍 RAG: truy xuất ngữ cảnh từ Chroma
+            retrieved_docs = vector_db.similarity_search(message, k=4)
+            context = "\n".join([doc.page_content for doc in retrieved_docs])
+            print("Retrieved Context:", context)
+            # 🔧 Prompt
+            prompt = f"""
+You are an English learning assistant.
+Use the context below to help the user with the topic: {topic}.
+
+Context:
+{context}
+
+User: {message}
+Assistant:
+"""
+
+            # 💬 Gửi vào Gemini
+            response = model.generate_content(prompt)
+            print("Gemini Response:", response.text.strip())
+            cleaned = re.sub(r"\*+", "", response.text.strip())
+            return JsonResponse({'response': cleaned})
+        except Exception as e:
+            return JsonResponse({'error': str(e)}, status=500)
+    return JsonResponse({'error': 'Invalid request'}, status=400)
+
+def profile_view(request):
+    return HttpResponse("You are logged in!")
