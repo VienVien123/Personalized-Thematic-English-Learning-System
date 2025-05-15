@@ -61,6 +61,7 @@ class User(AbstractBaseUser, PermissionsMixin):
     def __str__(self):
         return self.name or self.email
     
+
 class TopicListen(models.Model):
     name = models.CharField(max_length=255)
     slug = models.SlugField(unique=True, blank=True)
@@ -126,7 +127,7 @@ class AudioExercise(models.Model):
 
     def __str__(self):
         return self.subtopic.title
-    
+
 # Chủ đề hệ thống (backup)
 class TopicVocab(models.Model):
     topic = models.CharField(max_length=100)
@@ -153,3 +154,5 @@ class Word(models.Model):
 
     def __str__(self):
         return self.word
+
+

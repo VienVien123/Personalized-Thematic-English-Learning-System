@@ -48,6 +48,7 @@ INSTALLED_APPS = [
     'allauth',
     'allauth.account',
     'allauth.socialaccount',
+    "allauth.socialaccount.providers.google", 
 
 
     'rest_framework',
@@ -96,6 +97,13 @@ WSGI_APPLICATION = "englishlearning.wsgi.application"
 DATABASES = {
     'default': env.db(),
 }
+# sqlite3
+# DATABASES = {
+#     "default": {
+#         "ENGINE": "django.db.backends.sqlite3",
+#         "NAME": BASE_DIR / "db.sqlite3",
+#     }
+# }
 
 
 # Password validation
@@ -155,7 +163,7 @@ SITE_ID = 1
 
 REST_FRAMEWORK = {
     'DEFAULT_PERMISSION_CLASSES': [
-        "rest_framework.permissions.AllowAny",
+        "rest_framework.permissions.IsAuthenticated",
     ],
 
     'DEFAULT_AUTHENTICATION_CLASSES': [
@@ -227,8 +235,31 @@ ACCOUNT_EMAIL_REQUIRED = True
 ACCOUNT_USERNAME_REQUIRED = False
 ACCOUNT_UNIQUE_EMAIL = True
 ACCOUNT_USER_MODEL_USERNAME_FIELD = None
+SOCIALACCOUNT_LOGIN_ON_GET = True
+
+client_id_app_google = "968365365282-6mcdfs7vdlikftaivsneajuak0po5khm.apps.googleusercontent.com"
+client_secret_app_google = "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"
+
 
 AUTHENTICATION_BACKENDS = [
     'django.contrib.auth.backends.ModelBackend',
     'allauth.account.auth_backends.AuthenticationBackend',
 ]
+LOGIN_REDIRECT_URL = '/page/home'
+
+SOCIALACCOUNT_PROVIDERS = {
+    'google': {
+        'APP': {
+            'client_id': client_id_app_google,
+            'secret': client_secret_app_google,
+        },
+        'SCOPE': [
+            'profile',
+            'email',
+        ],
+        'AUTH_PARAMS': {
+            'access_type': 'offline',
+            'prompt': 'select_account'
+        },
+    }
+}
